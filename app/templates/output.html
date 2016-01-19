@@ -1,0 +1,124 @@
+Skip to content
+This repository  
+Search
+Pull requests
+Issues
+Gist
+ @jbrosamer
+ Watch 1
+  Star 0
+  Fork 0 ayfu/Honda_craigslist
+ Code  Issues 0  Pull requests 0  Wiki  Pulse  Graphs
+Branch: master Find file Copy pathHonda_craigslist/app/templates/pairplot.html
+c501267  on Nov 1, 2015
+@ayfu ayfu modified templates and added descriptions
+1 contributor
+RawBlameHistory     89 lines (69 sloc)  3.26 KB
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <title>Pony pricer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Bootstrap -->
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet" />
+
+  <link href="http://fonts.googleapis.com/css?family=Abel|Open+Sans:400,600" rel="stylesheet" />
+
+  <style>
+
+    /* http://css-tricks.com/perfect-full-page-background-image/ */
+    /*horse fence*/
+    html {
+      background: url('https://static.pexels.com/photos/6468/animal-brown-horse.jpg') no-repeat center center fixed; 
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+    }
+
+    body {
+      padding-top: 20px;
+      font-size: 16px;
+      font-family: "Open Sans",serif;
+      background: transparent;
+    }
+
+    h1 {
+      font-family: "Abel", Arial, sans-serif;
+      font-weight: 400;
+      font-size: 40px;
+    }
+
+    /* Override B3 .panel adding a subtly transparent background */
+    .panel {
+      background-color: rgba(255, 255, 255, 0.9);
+    }
+
+    .margin-base-vertical {
+      margin: 40px 0;
+    }
+
+  </style>
+
+</head>
+
+  <body>
+
+    <div class="site-wrapper">
+
+      <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+          <div class="masthead clearfix">
+            <div class="inner">
+              <h3 class="masthead-brand">Good Prices for Craigslist Cars</h3>
+              <nav>
+                <ul class="nav masthead-nav">
+                  <li><a href="{{ url_for('input') }}">Home</a></li>
+                  <li><a href="https://github.com/jbrosamer/">
+                    <i class="fa fa-github fa-lg"></i></a></li>
+                  <li><a href="https://www.linkedin.com/in/jbrosamer">
+                    <i class="fa fa-linkedin fa-lg"></i></a></li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+
+          <div class="inner cover">
+            <p class="lead">
+              <center>
+              <img src = "../static/img/HorseDollar.jpg" alt="pointdiff" align = "middle" width="100%"/>
+              </center>
+            </p>
+            <p>
+                Your horse is worth XXx!
+            </p>
+            <p class="lead">
+              <a href="{{ url_for('input') }}" class="btn btn-lg btn-default">Pair Plot</a>
+              <a href="{{ url_for('input') }}" class="btn btn-lg btn-default">Cross Validation Result</a>
+              <a href="{{ url_for('input') }}" class="btn btn-lg btn-default">Test Set Prediction Result</a>
+            </p>
+          </div>
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="/static/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>
+Status API Training Shop Blog About Pricing
+© 2016 GitHub, Inc. Terms Privacy Security Contact Help
