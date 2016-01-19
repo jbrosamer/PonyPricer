@@ -3,7 +3,6 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import numpy as np
 import re, pickle, sys, traceback
-import categories as cat
 from datetime import datetime
 
 url="http://www.dreamhorse.com/d/5/dressage/horses-for-sale.html"
@@ -12,9 +11,9 @@ br.set_handle_robots(False)
 br.set_handle_robots(False)
 br.set_handle_equiv(False)
 br.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
-columns=['id','breed', 'price', 'color','location', 'age', 'zip', 'height', 'temp', 'warmblood', 'sold', 'soldhere']
-columns+=['forsale', 'forlease', 'registered', 'skills']
-cellColMap={32: 'for lease', 34: 'for sale', 2: 'zip', 36: 'price', 38: 'skills', 6: 'age', 8: 'gender', 10: 'height', 14: 'color', 20: 'warmblood', 22: 'temp', 4: 'breeds', 26: 'registered'}
+columns=['id','breed', 'breedStr', 'price', 'color','location', 'age', 'zip', 'height', 'temp', 'warmblood', 'sold', 'soldhere']
+columns+=['forsale', 'forlease', 'registered', 'skills', 'desc']
+cellColMap={32: 'for lease', 34: 'for sale', 2: 'zip', 36: 'price', 38: 'skills', 6: 'age', 8: 'gender', 10: 'height', 14: 'color', 20: 'warmblood', 22: 'temp', 4: 'breed', 26: 'registered', 40: 'desc'}
 # mech = Browser()
 # page = br.open(url)
 # html = page.read()
@@ -23,8 +22,9 @@ cellColMap={32: 'for lease', 34: 'for sale', 2: 'zip', 36: 'price', 38: 'skills'
 #can just get ids then use to look at ads
 fromPickle=True
 pickleIds=None
+outputPath="/Users/jbrosamer/PonyPricer/Batch/"
 if fromPickle:
-	pickleIds=pickle.load(open("DressageIds.p", 'rb'))
+	pickleIds=pickle.load(open("/Users/jbrosamer/PonyPricerFiles/ScrapedIds.p", 'rb'))
 
 def dateStrToAge(cellTxt):
 	try:
@@ -61,7 +61,7 @@ def scrapeSearch(url, batchStart=0, batchSize=1000):
 	df=pd.DataFrame(columns=columns, index=ids)
 
 	startTime = datetime.now()
-	badIds=open("Batch15/BadIds%iTo%i.txt"%(batchStart, batchSize+batchStart), 'wb')
+	badIds=open("/Users/jbrosamer/PonyPricer/Batch/BadIds%iTo%i.txt"%(batchStart, batchSize+batchStart), 'wb')
 	for n, i in enumerate(ids):
 		try:
 			srs=scrapeAd(i)
@@ -77,7 +77,9 @@ def scrapeSearch(url, batchStart=0, batchSize=1000):
 	elapsedSec=(datetime.now()-startTime).seconds
 	print "Time to scrape %i ids: %f minutes"%(len(ids), elapsedSec/60.)
 	try:
-		df.to_csv("Batch15/DressageId%iTo%i.csv"%(batchStart, batchSize+batchStart))
+		pickle.dump(df, open("/Users/jbrosamer/PonyPricer/Batch/DressageId%iTo%i.p"%(batchStart, batchSize+batchStart), "wb"))
+		df.to_sql("/Users/jbrosamer/PonyPricer/Batch/DressageId%iTo%i.sql"%(batchStart, batchSize+batchStart))
+		print "df",df
 	except Exception as e:
 		badIds.write(str(e)+"\n")
 	badIds.close()
@@ -96,7 +98,7 @@ def getNextPage(br):
 	return ""
 
 def extractIds(html):
-	soup = BeautifulSoup(html)
+	soup = BeautifulSoup(html, "html.parser")
 	ids=list()
 	for input_el in soup.findAll('input'):
 		if input_el.has_attr('name') and (input_el['name']=="form_horse_id"):
@@ -107,7 +109,7 @@ def extractIds(html):
 def scrapeAd(id):
 	page = br.open("http://www.dreamhorse.com/ad/%i.html"%id)
 	html = page.read()
-	soup = BeautifulSoup(html)
+	soup = BeautifulSoup(html, "html.parser")
 	tables=soup.findAll(name="table")
 	adDict=dict.fromkeys(columns)
 	adDict['id']=id
@@ -134,13 +136,15 @@ def scrapeAd(id):
 			except Exception as e:
 				print "Zip exception ",str(e)
 				adDict['zip']=0
-				return
-		elif "Breed"==colName:
+				continue
+		elif "breed"==colName:
 			adDict['breed']=""
-			for t in cellTxt.split("\n")[:-1]:
+			adDict['breedStr']=cellTxt
+			for t in cellTxt.split("\n"):
 				thisCell=str(t.replace(u'\xa0', '').replace("Related Searches by Breed", "")).replace(" Cross", "").strip()
 				if len(thisCell) > 5:
 					adDict['breed']=thisCell
+					continue
 		elif "age"==colName:
 			adDict['age']=dateStrToAge(cellTxt)
 		elif "gender"==colName:
@@ -191,6 +195,9 @@ def scrapeAd(id):
 				thisCell=str(t.replace(u'\xa0', '')).strip()
 				if len(thisCell) > 3:
 					adDict['skills'].append(thisCell)
+		elif "desc"==colName:
+			adDict['desc']=cellTxt
+
 
 	# for x in range(len(cells)):
 	# 	text=cells[x].text
@@ -262,7 +269,7 @@ def scrapeAd(id):
 
 if __name__ == "__main__":
 	nPages=5203
-	batchSize=100
-	start=41000
+	batchSize=500
+	start=3000
 	for x in range(start, nPages, batchSize):
 		scrapeSearch(url, x, batchSize)

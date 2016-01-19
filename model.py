@@ -29,6 +29,8 @@ def all_data(path):
     frame = pd.concat(dfs)
     frame = frame.reset_index().drop('index', axis = 1)
     return frame
+def predictPrice(age=10, breed='Westphalian', gender='Gelding', height='17.0hh'):
+    return 5,000
 
 def clean_col(df):
     """
