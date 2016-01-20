@@ -1,4 +1,4 @@
-import re, glob
+import re, glob, pickle
 
 import requests
 import pandas as pd
@@ -13,64 +13,39 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy import stats
 # Path of data
-path="/Users/jbrosamer/PonyPricerFiles/Batchs/DressageId*1000*.csv"     
+pandasPath="/Users/jbrosamer/PonyPricer/Batch/DressageAllAds.p"
     
-def all_data(path):
+def all_data(path=pandasPath):
     """
     Takes in: with wildcarding of dataframes stored in .csv
     
     Returns: a dataframe of all 
     """
-    files=glob.glob(path)
-    dfs=[]
-    frame=pd.DataFrame()
-    for f in files:
-        dfs.append(pd.read_csv(f))
-    frame = pd.concat(dfs)
-    frame = frame.reset_index().drop('index', axis = 1)
-    return frame
+    df=pickle.load(open(pandasPath, 'rb'))    
+    return df
+def clean_col(df):
+    df=df[(df['age']>0) & (df['price']>=1000) & (df['inches']>50) & (df['gender'] != '')]
+    df = df.reset_index().drop('index', axis = 1)
+    return df
+
 def predictPrice(age=10, breed='Westphalian', gender='Gelding', height='17.0hh'):
     return 5,000
 
-def clean_col(df):
-    """
-    Takes in: dataframe from all_data
 
-    Returns: a dataframe after converting null values
-    """
-    for col in df.columns:
-        # Honda civics are 4 cylinders
-        if col == 'cylinders':
-            df.loc[pd.isnull(df[col]), col] = 4
-        elif col == 'extra':
-            df.loc[pd.isnull(df[col]), col] = 'normal'
-        elif col == 'fuel':
-            df.loc[pd.isnull(df[col]), col] = 'gas'
-        elif col == 'drive':
-            df.loc[pd.isnull(df[col]), col] = 'fwd'
-        elif col == 'transmission':
-            df.loc[pd.isnull(df[col]), col] = 'auto'
-        elif col == 'type':
-            df.loc[pd.isnull(df[col]), col] = 'unknown'
-    return df
-        
 def encode(df):
     """
     Takes in: dataframe from clean_col
     
     Returns: a dataframe that LabelEncodes the categorical variables
     """
-    columns = ['drive', 'extra', 'fuel',
-               'odometer', 'title_stat',
-               'transmission', 'type']
-    for col in columns:
+    lblColumns=['breed', 'color', 'warmblood', 'registered', 'gender']
+    for col in lblColumns:
         le = LabelEncoder()
         le.fit(df[col])
         df[col] = le.transform(df[col])
     
-    final_cols = ['year', 'cylinders', 'drive', 'extra',
-                  'fuel', 'odometer', 'title_stat',
-                  'transmission', 'type', 'price']
+    final_cols = ['age', 'gender', 'inches', 'color', 'breed']# 'color', 'registered', 'price']
+    final_cols+=['price']
     # Order columns with price as the last column
     df = df[final_cols]
     return df
@@ -137,8 +112,8 @@ class Model():
         ax.set_xlabel('Actual Price ($)',fontsize = 20)
         ax.set_ylabel('Predicted Price ($)', fontsize = 20)
         ax.set_title('Results from KFold Cross-Validation', fontsize = 25)
-        ax.set_xlim(0,30000)
-        ax.set_ylim(0,30000)
+        ax.set_xlim(0,100000)
+        ax.set_ylim(0,100000)
         ax.legend(loc=2, fontsize = 16)
         ax.tick_params(labelsize =20)
     
@@ -165,8 +140,8 @@ class Model():
         ax.set_xlabel('Actual Price ($)',fontsize = 20)
         ax.set_ylabel('Predicted Price ($)', fontsize = 20)
         ax.set_title('Results from Test Set', fontsize = 25)
-        ax.set_xlim(0,30000)
-        ax.set_ylim(0,30000)
+        ax.set_xlim(0,100000)
+        ax.set_ylim(0,100000)
         ax.legend(loc=2, fontsize = 16)
         ax.tick_params(labelsize =20)
     def run():

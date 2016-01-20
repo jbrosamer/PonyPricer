@@ -21,6 +21,8 @@ import numpy as np
 import mysql.connector
 import pickle, glob
 
+import categories as cat
+
 class dbConnect():
     '''
     Class to help with context management for 'with' statements.
@@ -55,13 +57,17 @@ def pickleToDataframe(path="/Users/jbrosamer/PonyPricer/Batch/DressageId*.p"):
     df = df.reset_index().drop('index', axis = 1)
     return df
 def inches(row):
+    inches=np.nan
     try:
          if "hh" in row["height"]:
-            return float(row['height'].split('.')[0])*4.0+float(row['height'].split('.')[1][0])
-         if "Inch" in row['height']:
-            return float(row['height'].replace(" Inches", ""))
+            inches=float(row['height'].split('.')[0])*4.0+float(row['height'].split('.')[1][0])
+         elif "Inch" in row['height']:
+            inches=float(row['height'].replace(" Inches", ""))
     except:
-        return 0
+        return np.nan
+    if inches > 0:
+        return inches
+    return np.nan
 def skillToStr(row):
     try:
         if pd.isnull(row['skills']):
@@ -69,23 +75,33 @@ def skillToStr(row):
         return ",".join(row['skills'])
     except:
         return ""
-
+def cleanBreed(row):
+    if row['breed'] in cat.breeds:
+        return row['breed']
+    for b in cat.breeds:
+        if b in row['breedStr']:
+            return b
+    return "Unknown"
+def cleanGender(row):
+    if row['gender'] in cat.genders:
+        return str(row['gender'])
+    if row['gender']=="Filly":
+        return "Mare"
+    if row['gender']=="Colt":
+        return "Stallion"
+    return ""
 
 def cleanDf(df):
 
     df=df[df.id > 0]
     df=df[df.price > 0]
-    df=df[df.price < 100000]
+   # df=df[df.price < 100000]
     df=df[df.age >0]
     df['inches']=df.apply(inches, axis=1)
     df['skills']=df.apply(skillToStr, axis=1)
-    # allCols=[u'id', u'breed', u'breedStr', u'price', u'color', u'location', u'age',
-    #    u'zip', u'height', u'temp', u'warmblood', u'sold', u'soldhere',
-    #    u'forsale', u'forlease', u'registered', u'skills', u'desc', u'inches']
+    df['breed']=df.apply(cleanBreed, axis=1)
+    df['gender']=df.apply(cleanGender, axis=1)
     badCols=['breedStr', 'desc', 'location', 'height']
-    # badCols=[u'breed', u'breedStr', u'price', u'color', u'location', u'age',
-    #    u'zip', u'height', u'temp', u'warmblood', u'sold', u'soldhere',
-    #    u'forsale', u'forlease', u'registered', u'skills', u'desc', u'inches']
     df=df.drop(badCols, axis=1)
     
     df = df.reset_index().drop('index', axis = 1)
@@ -106,8 +122,10 @@ def main():
 
     connect = dbConnect(host = 'localhost', user = 'root',
             passwd = 'jbrosamer', db = 'horses')
+    keyword="Dressage"
     with connect:
-            tablename = "dressageAds"
+            path="/Users/jbrosamer/PonyPricer/Batch/%sId*.p"%keyword
+            tablename = "%sAds"%keyword
 
             # Run Scraper
             df=pickleToDataframe()
@@ -124,12 +142,16 @@ def main():
                     dtype[df.columns[i]] = 'INTEGER'
                 elif df.columns[i] in ['price', 'height', 'age']:
                     dtype[df.columns[i]] = 'REAL'
-                else:
+                elif df.columns[i] in ['breedStr', 'desc', 'location', 'height']:
                     dtype[df.columns[i]] = 'TEXT'
+                else:
+                    dtype[df.columns[i]] = 'VARCHAR(50)'
             print dtype
             x = pd.DataFrame({'x': [1, 2, 3], 'y': [3, 4, 5]})
             df.to_sql(name = tablename, con = connect.con,
                       flavor = 'mysql', if_exists='replace')
+            pickle.dump(df, open("/Users/jbrosamer/PonyPricer/Batch/%sAllAds.p"%keyword, 'wb'))
+            df.to_csv("/Users/jbrosamer/PonyPricer/Batch/%sAllAds.csv"%keyword)
 
             # Send to MySQL database, if table exists, continue to next
             try:

@@ -12,7 +12,7 @@ br.set_handle_robots(False)
 br.set_handle_equiv(False)
 br.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
 columns=['id','breed', 'breedStr', 'price', 'color','location', 'age', 'zip', 'height', 'temp', 'warmblood', 'sold', 'soldhere']
-columns+=['forsale', 'forlease', 'registered', 'skills', 'desc']
+columns+=['forsale', 'forlease', 'registered', 'skills', 'desc', 'gender']
 cellColMap={32: 'for lease', 34: 'for sale', 2: 'zip', 36: 'price', 38: 'skills', 6: 'age', 8: 'gender', 10: 'height', 14: 'color', 20: 'warmblood', 22: 'temp', 4: 'breed', 26: 'registered', 40: 'desc'}
 # mech = Browser()
 # page = br.open(url)
@@ -78,7 +78,7 @@ def scrapeSearch(url, batchStart=0, batchSize=1000):
 	print "Time to scrape %i ids: %f minutes"%(len(ids), elapsedSec/60.)
 	try:
 		pickle.dump(df, open("/Users/jbrosamer/PonyPricer/Batch/DressageId%iTo%i.p"%(batchStart, batchSize+batchStart), "wb"))
-		df.to_sql("/Users/jbrosamer/PonyPricer/Batch/DressageId%iTo%i.sql"%(batchStart, batchSize+batchStart))
+		df.to_csv("/Users/jbrosamer/PonyPricer/Batch/DressageId%iTo%i.csv"%(batchStart, batchSize+batchStart))
 		print "df",df
 	except Exception as e:
 		badIds.write(str(e)+"\n")
@@ -270,6 +270,6 @@ def scrapeAd(id):
 if __name__ == "__main__":
 	nPages=5203
 	batchSize=500
-	start=3000
+	start=0
 	for x in range(start, nPages, batchSize):
 		scrapeSearch(url, x, batchSize)
