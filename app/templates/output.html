@@ -1,110 +1,28 @@
-Skip to content
-This repository  
-Search
-Pull requests
-Issues
-Gist
- @jbrosamer
- Watch 1
-  Star 0
-  Fork 0 ayfu/Honda_craigslist
- Code  Issues 0  Pull requests 0  Wiki  Pulse  Graphs
-Branch: master Find file Copy pathHonda_craigslist/app/templates/pairplot.html
-c501267  on Nov 1, 2015
-@ayfu ayfu modified templates and added descriptions
-1 contributor
-RawBlameHistory     89 lines (69 sloc)  3.26 KB
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
-  <title>Pony pricer</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Bootstrap -->
-  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
-  <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Pony pricer</title>
 
-  <link href="http://fonts.googleapis.com/css?family=Abel|Open+Sans:400,600" rel="stylesheet" />
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
 
-  <style>
-
-    /* http://css-tricks.com/perfect-full-page-background-image/ */
-    /*horse fence*/
-    html {
-      background: url('https://static.pexels.com/photos/6468/animal-brown-horse.jpg') no-repeat center center fixed; 
-      -webkit-background-size: cover;
-      -moz-background-size: cover;
-      -o-background-size: cover;
-      background-size: cover;
-    }
-
-    body {
-      padding-top: 20px;
-      font-size: 16px;
-      font-family: "Open Sans",serif;
-      background: transparent;
-    }
-
-    h1 {
-      font-family: "Abel", Arial, sans-serif;
-      font-weight: 400;
-      font-size: 40px;
-    }
-
-    /* Override B3 .panel adding a subtly transparent background */
-    .panel {
-      background-color: rgba(255, 255, 255, 0.9);
-    }
-
-    .margin-base-vertical {
-      margin: 40px 0;
-    }
-
-  </style>
-
-</head>
-
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
   <body>
+    <h1>{{ outStr }}</h1>
 
-    <div class="site-wrapper">
-
-      <div class="site-wrapper-inner">
-
-        <div class="cover-container">
-
-
-          <div class="inner cover">
-            <p class="lead">
-              <center>
-              <img src = "../static/img/HorseDollar.jpg" alt="pointdiff" align = "middle" width="100%"/>
-              </center>
-            </p>
-            <p>
-                Your horse is worth {{ price }}
-            </p>
-            <p class="lead">
-              <a href="{{ url_for('input') }}" class="btn btn-lg btn-default">Pair Plot</a>
-              <a href="{{ url_for('input') }}" class="btn btn-lg btn-default">Cross Validation Result</a>
-              <a href="{{ url_for('input') }}" class="btn btn-lg btn-default">Test Set Prediction Result</a>
-            </p>
-          </div>
-
-
-
-        </div>
-
-      </div>
-
-    </div>
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="/static/js/bootstrap.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="/static/js/ie10-viewport-bug-workaround.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="../static/js/bootstrap.min.js"></script>
   </body>
 </html>
-Status API Training Shop Blog About Pricing
-© 2016 GitHub, Inc. Terms Privacy Security Contact Help
