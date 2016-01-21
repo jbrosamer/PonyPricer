@@ -15,11 +15,15 @@ from sklearn.linear_model import Ridge
 from sklearn.preprocessing import PolynomialFeatures
 import matplotlib.pyplot as plt
 import seaborn as sns
-from scipy import stats
+from scipy import  stats
+
+final_cols = ['age', 'gender', 'inches', 'color', 'breed']# 'color', 'registered', 'price']
+final_cols+=['lnprice']
+lblColumns=['breed', 'color', 'gender']
 # Path of data
 priceMin=1000
 priceMax=100000
-pandasPath="/Users/jbrosamer/PonyPricer/Batch/DressageAllAds.p"
+pandasPath="/Users/jbrosamer/PonyPricer/BatchBkup/DressageAllAds.p"
     
 def all_data(path=pandasPath):
     """
@@ -30,12 +34,12 @@ def all_data(path=pandasPath):
     df=pickle.load(open(pandasPath, 'rb'))    
     return df
 def clean_col(df):
+    print "df.columns",df.columns
     df=df[(df['age']>0) & (df['price']>=priceMin) &  (df['price']<=priceMax) & (df['inches']>50) & (df['gender'] != '')]
     df = df.reset_index().drop('index', axis = 1)
     return df
 
-def predictPrice(age=10, breed='Westphalian', gender='Gelding', height='17.0hh'):
-    return 5,000
+
 
 
 def encode(df):
@@ -44,21 +48,23 @@ def encode(df):
     
     Returns: a dataframe that LabelEncodes the categorical variables
     """
-    lblColumns=['breed', 'color', 'warmblood', 'registered', 'gender']
+
     for col in lblColumns:
         le = LabelEncoder()
         le.fit(df[col])
         df[col] = le.transform(df[col])
-    
-    final_cols = ['age', 'gender', 'inches', 'color', 'breed']# 'color', 'registered', 'price']
-    final_cols+=['lnprice']
     # Order columns with price as the last column
     df = df[final_cols]
     return df
 
+
+
+
 class Model():
     
-    def __init__(self, df, params, test_size = 0.3):
+    def __init__(self, df=None, params={}, test_size = 0.3):
+        if df is None:
+            df=all_data()
         self.df = df
         self.params = params
         self.test_size = 0.3
@@ -77,6 +83,7 @@ class Model():
         self.X_test = X_test
         self.y_train = y_train
         self.y_test = y_test
+        self.gbr=None
 
     def makeModel(self):
         gbr = GradientBoostingRegressor(**self.params)
@@ -86,6 +93,9 @@ class Model():
         gbr.fit(self.X, self.Y)
         self.gbr=gbr
         return gbr
+    # def predictPrice(self, breed="Thoroughbred", age=10., height=66., gender="Gelding"):
+    #     inDf=pd.DataFrame(columns=final_cols)
+    #     inDf['']
 
         
     def kfold_cv(self, n_folds = 3):
@@ -220,22 +230,19 @@ class Model():
         ax.set_ylim(0,50000)
         ax.legend(loc=2, fontsize = 16)
         ax.tick_params(labelsize =20)
-    def run():
-        """
-            Run the test
-        """
-        df_test = all_data(path)
-        df = df_test.copy()
-        df = clean_col(df)
-        df = encode(df)
-        params_gbr = {'loss': 'ls',
-                      'learning_rate': 0.02,
-                      'n_estimators': 500,
-                      'max_depth': 6,
-                      'min_samples_split': 2,
-                      'min_samples_leaf': 13,
-                      'subsample': 0.7
-                     }
-        b = Model(df, params = params_gbr)
-        b.split()
-        b.kfold_cv(n_folds = 3)
+def runPrediction(inDict={'breed':["Thoroughbred"],'age':[10],'inches':[66.],'gender':["Gelding"],'color':["Bay"], 'lnPrice':[1.0]}):
+    df_test = all_data(pandasPath)
+    df = df_test.copy()
+    df = clean_col(df)
+    lenTrain=len(df)
+    testDf=pd.DataFrame.from_dict(inDict)
+    total=pd.concat([df, testDf])
+    total = total.reset_index().drop('index', axis = 1)
+    total=encode(total)
+    trainDf=total[:lenTrain]
+    testDf=total[lenTrain:]
+    model=Model(trainDf)
+    gbr=model.makeModel()
+    x_test=testDf.as_matrix(testDf.columns[:-1])
+    pred=gbr.predict(x_test)
+    return pred
