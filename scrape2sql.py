@@ -20,6 +20,7 @@ import pandas as pd
 import numpy as np
 import mysql.connector
 import pickle, glob
+import math
 
 import categories as cat
 
@@ -101,6 +102,7 @@ def cleanDf(df):
     df['skills']=df.apply(skillToStr, axis=1)
     df['breed']=df.apply(cleanBreed, axis=1)
     df['gender']=df.apply(cleanGender, axis=1)
+    df['lnprice']=df.apply(lambda x: math.log(x['price']), axis=1)
     badCols=['breedStr', 'desc', 'location', 'height']
     df=df.drop(badCols, axis=1)
     
@@ -140,7 +142,7 @@ def main():
                     dtype[df.columns[i]] = 'BOOLEAN'
                 elif df.columns[i] in ['id', 'temp']:
                     dtype[df.columns[i]] = 'INTEGER'
-                elif df.columns[i] in ['price', 'height', 'age']:
+                elif df.columns[i] in ['price', 'height', 'age', 'lnprice']:
                     dtype[df.columns[i]] = 'REAL'
                 elif df.columns[i] in ['breedStr', 'desc', 'location', 'height']:
                     dtype[df.columns[i]] = 'TEXT'

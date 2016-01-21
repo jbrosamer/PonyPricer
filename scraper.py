@@ -2,8 +2,10 @@ from mechanize import Browser
 from bs4 import BeautifulSoup
 import pandas as pd
 import numpy as np
-import re, pickle, sys, traceback
+import re, pickle, sys, traceback, os
 from datetime import datetime
+from progressbar import ProgressBar
+from collections import OrderedDict
 
 url="http://www.dreamhorse.com/d/5/dressage/horses-for-sale.html"
 br = Browser()
@@ -21,10 +23,13 @@ cellColMap={32: 'for lease', 34: 'for sale', 2: 'zip', 36: 'price', 38: 'skills'
 # numInSearch=None
 #can just get ids then use to look at ads
 fromPickle=True
-pickleIds=None
-outputPath="/Users/jbrosamer/PonyPricer/Batch/"
-if fromPickle:
-	pickleIds=pickle.load(open("/Users/jbrosamer/PonyPricerFiles/ScrapedIds.p", 'rb'))
+scrapedIds=[]
+urlDict=OrderedDict([('Dressage',"http://www.dreamhorse.com/d/5/dressage/horses-for-sale.html"), ( "Jumping","http://www.dreamhorse.com/d/12/jumping/horses-for-sale.html"), ( "Eventing","http://www.dreamhorse.com/d/8/eventing/horses-for-sale.html"), ( "Hunter","http://www.dreamhorse.com/d/11/hunter/horses-for-sale.html"), ("Warmblood", "http://www.dreamhorse.com/list-horses/warmbloods.html")])
+dataDir="/Users/jbrosamer/PonyPricer/WarmbloodData/"
+scrapedIdFile=dataDir+"ScrapedIds.p"
+pbar=ProgressBar()
+if fromPickle and os.path.isfile(scrapedIdFile):
+	scrapedIds=sorted(list(pickle.load(open(scrapedIdFile, 'rb'))))
 
 def dateStrToAge(cellTxt):
 	try:
@@ -43,46 +48,61 @@ def heightStrToIn(cellTxt):
 		inHeight=float(heightStr.split(" ")[0])
 	return heightStr
 
-
-def scrapeSearch(url, batchStart=0, batchSize=1000):
-	if fromPickle:
-		print "Scraping ",batchStart, "to ",batchSize+batchStart
-		ids=pickleIds[batchStart:batchStart+batchSize]
-		print "Loaded %i Ids"%len(ids)
+def IdsFromKey(key, excludeScraped=True):
+	page = br.open(urlDict[key])
+	html = page.read()
+	ids=[]
+	while html != "":
+		ids+=extractIds(html)
+		html=getNextPage(br)
+		print "Found %s %i ids"%(key, len(ids))
+	print "Done with len(ids)",len(ids)
+	keyIds=set(ids)
+	if excludeScraped:
+		scrapedIds=sorted(list(pickle.load(open(scrapedIdFile, 'rb'))))
 	else:
-	    page = br.open(url)
-	    html = page.read()
-	    ids=[]
-	    while html != "":
-	    	ids+=extractIds(html)
-	    	html=getNextPage(br)
-	    print "Done with len(ids)",len(ids)
-	    pickle.dump(ids, open("DressageIds.p", 'wb'))
-	df=pd.DataFrame(columns=columns, index=ids)
+		scrapedIds=[]
+	keyIds=sorted(list(set(keyIds-set(scrapedIds))))
+	scrapedIds=set(scrapedIds+keyIds)
+	pickle.dump(keyIds, open(dataDir+"%sIds.p"%key, 'wb'))
+	pickle.dump(scrapedIds, open(scrapedIdFile, 'wb'))
+	return keyIds
+	
 
-	startTime = datetime.now()
-	badIds=open("/Users/jbrosamer/PonyPricer/Batch/BadIds%iTo%i.txt"%(batchStart, batchSize+batchStart), 'wb')
-	for n, i in enumerate(ids):
+
+def scrapeSearch(key, batchSize=1000, batchStart=0):
+
+	ids=list(sorted(pickle.load(open(dataDir+"%sIds.p"%key, "rb"))))
+	print "Loaded %i ids from %s"%(len(ids), dataDir+"%sIds.p"%key)
+	allDf=[]
+	for x in range(batchStart, len(ids), batchSize):
+		df=pd.DataFrame(columns=columns, index=ids)
+		startTime = datetime.now()
+		batchIds=ids[x:x+batchSize]
+		badIds=open(dataDir+"%sBadIds%iTo%i.txt"%(key,batchStart, batchSize+batchStart), 'wb')
+		print "Start scraping %i to %i"%(x, x+batchSize)
+		for n, i in enumerate(batchIds):
+			try:
+				srs=scrapeAd(i)
+				df.loc[i]=scrapeAd(i)
+			except Exception as e:
+				print "BadId",i," exception ",str(e)
+				print '-'*60
+				traceback.print_exc(file=sys.stdout)
+				print '-'*60
+				badIds.write("%i\n"%i)
 		try:
-			srs=scrapeAd(i)
-			df.loc[i]=scrapeAd(i)
+			print "Writing ",dataDir+"%sId%iTo%i.p"%(key,batchStart, batchSize+batchStart)
+			pickle.dump(df, open(dataDir+"%sId%iTo%i.p"%(key,batchStart, batchSize+batchStart), "wb"))
+			df.to_csv(dataDir+"%sId%iTo%i.csv"%(key,batchStart, batchSize+batchStart))
 		except Exception as e:
-			print "BadId",i," exception ",str(e)
-			print '-'*60
-			traceback.print_exc(file=sys.stdout)
-			print '-'*60
-			badIds.write("%i\n"%i)
-		if n%10==0:
-			print "ID number:",n
-	elapsedSec=(datetime.now()-startTime).seconds
-	print "Time to scrape %i ids: %f minutes"%(len(ids), elapsedSec/60.)
-	try:
-		pickle.dump(df, open("/Users/jbrosamer/PonyPricer/Batch/DressageId%iTo%i.p"%(batchStart, batchSize+batchStart), "wb"))
-		df.to_csv("/Users/jbrosamer/PonyPricer/Batch/DressageId%iTo%i.csv"%(batchStart, batchSize+batchStart))
-		print "df",df
-	except Exception as e:
-		badIds.write(str(e)+"\n")
-	badIds.close()
+			badIds.write(str(e)+"\n")
+		badIds.close()
+		elapsedSec=(datetime.now()-startTime).seconds
+		allDf=pd.concact(allDf)
+		pickle.dump(df, open(dataDir+"All%sAds.p"%(key), "wb"))
+		print "Time to scrape %i ids: %f minutes"%(len(ids), elapsedSec/60.)
+	
     
     
 def getNextPage(br):
@@ -90,7 +110,6 @@ def getNextPage(br):
 		if "http://www.dreamhorse.com/show_list_pages.php"==form.action:
 			for control in form.controls:
 				if "Next" in repr(control.value):
-						print "NR Next",nr
 						br.select_form(nr=nr)
 						response = br.submit()
 						content = response.read()
@@ -197,79 +216,10 @@ def scrapeAd(id):
 					adDict['skills'].append(thisCell)
 		elif "desc"==colName:
 			adDict['desc']=cellTxt
-
-
-	# for x in range(len(cells)):
-	# 	text=cells[x].text
-	# 	if "Location:" in text:
-	# 		adDict['location']=cells[x+1].text.split("\n")[1]
-	# 		try:
-	# 			zipStr=int(cells[x+1].text.split("\n")[1].split(" ")[-1])
-	# 			adDict['zip']=zipStr
-	# 		except:
-	# 			adDict['zip']=0
-	# 	elif "Breed:" in text:
-	# 		adDict['breed']=""
-	# 		for t in cells[x+1].text.split("\n")[:-1]:
-	# 			thisCell=str(t.replace(u'\xa0', '').replace("Related Searches by Breed", "")).replace(" Cross", "").strip()
-	# 			if len(thisCell) > 5:
-	# 				adDict['breed']=thisCell
-	# 	elif "Date Foaled:" in text:
-	# 		adDict['age']=dateStrToAge(cells[x+1].text)
-	# 	elif "Gender:" in text:
-	# 		adDict['gender']=cells[x+1].text.split("\n")[0]
-	# 	elif "Height:" in text:
-	# 		adDict['height']=heightStrToIn(cells[x+1].text)
-	# 	elif "Color:" in text:
-	# 		adDict['color']=cells[x+1].text.split("\n")[0]
-	# 	elif "Warmblood:" in text:
-	# 		if (cells[x+1].text.split("\n")[0].replace(r'\xa0','')=="Yes"):
-	# 			adDict['warmblood']=True
-	# 		else:
-	# 			adDict['warmblood']=False
-	# 	elif "Temperament:" in text:
-		   
-	# 		try:
-	# 			adDict['temp']=int(cells[x+1].text.split("\n")[0])
-	# 		except:
-	# 			#print "Temp cell",cells[x+1].text.split("\n")," isn't int!"
-	# 			adDict['temp']=11
-	# 	elif "Registered?" in text:
-	# 		if (cells[x+1].text.split("\n")[0].replace(r'\xa0','')=="Yes"):
-	# 			adDict['registered']=True
-	# 		else:
-	# 			adDict['registered']=False
-	# 	elif "For Sale:" in text:
-	# 		if (cells[x+1].text.split("\n")[0].replace(r'\xa0','')=="No"):
-	# 			adDict['for sale']=False
-	# 		else:
-	# 			adDict['for sale']=True
-	# 	elif "For Lease" in text:
-	# 		if (cells[x+1].text.split("\n")[0].replace(r'\xa0','')=="Yes"):
-	# 			adDict['for lease']=True
-	# 		else:
-	# 			adDict['for lease']=False
-	# 	elif "Askinto scg Price:" in text:
-	# 		badChars="(),USD$"
-	# 		price=cells[x+1].text.split("\n")[0]
-	# 		for b in badChars:
-	# 			price=price.replace(b, "")
-	# 		try:
-	# 			adDict['price']=int(price)
-	# 		except:
-	# 			adDict['price']=0
-	# 	elif "Horse Skills" in text:
-	# 		adDict['skills']=[]
-	# 		for t in cells[x+1].text.split("\n"):
-	# 			thisCell=str(t.replace(u'\to scxa0', '')).strip()
-	# 			if len(thisCell) > 3:
-	# 				adDict['skills'].append(thisCell)
 	return pd.Series(adDict)
 
 
 if __name__ == "__main__":
-	nPages=5203
-	batchSize=500
-	start=0
-	for x in range(start, nPages, batchSize):
-		scrapeSearch(url, x, batchSize)
+	#IdsFromKey("Warmblood", excludeScraped=False)
+	scrapeSearch("Warmblood")
+

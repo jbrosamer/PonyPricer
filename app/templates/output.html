@@ -72,20 +72,6 @@ RawBlameHistory     89 lines (69 sloc)  3.26 KB
 
         <div class="cover-container">
 
-          <div class="masthead clearfix">
-            <div class="inner">
-              <h3 class="masthead-brand">Good Prices for Craigslist Cars</h3>
-              <nav>
-                <ul class="nav masthead-nav">
-                  <li><a href="{{ url_for('input') }}">Home</a></li>
-                  <li><a href="https://github.com/jbrosamer/">
-                    <i class="fa fa-github fa-lg"></i></a></li>
-                  <li><a href="https://www.linkedin.com/in/jbrosamer">
-                    <i class="fa fa-linkedin fa-lg"></i></a></li>
-                </ul>
-              </nav>
-            </div>
-          </div>
 
           <div class="inner cover">
             <p class="lead">
@@ -94,7 +80,7 @@ RawBlameHistory     89 lines (69 sloc)  3.26 KB
               </center>
             </p>
             <p>
-                Your horse is worth XXx!
+                Your horse is worth {{ price }}
             </p>
             <p class="lead">
               <a href="{{ url_for('input') }}" class="btn btn-lg btn-default">Pair Plot</a>
