@@ -14,7 +14,7 @@ br.set_handle_robots(False)
 br.set_handle_equiv(False)
 br.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
 columns=['id','breed', 'breedStr', 'price', 'color','location', 'age', 'zip', 'height', 'temp', 'warmblood', 'sold', 'soldhere']
-columns+=['forsale', 'forlease', 'registered', 'skills', 'desc', 'gender']
+columns+=['forsale', 'forlease', 'registered', 'skills', 'desc']
 cellColMap={32: 'for lease', 34: 'for sale', 2: 'zip', 36: 'price', 38: 'skills', 6: 'age', 8: 'gender', 10: 'height', 14: 'color', 20: 'warmblood', 22: 'temp', 4: 'breed', 26: 'registered', 40: 'desc'}
 # mech = Browser()
 # page = br.open(url)
@@ -25,7 +25,7 @@ cellColMap={32: 'for lease', 34: 'for sale', 2: 'zip', 36: 'price', 38: 'skills'
 fromPickle=True
 scrapedIds=[]
 urlDict=OrderedDict([('Dressage',"http://www.dreamhorse.com/d/5/dressage/horses-for-sale.html"), ( "Jumping","http://www.dreamhorse.com/d/12/jumping/horses-for-sale.html"), ( "Eventing","http://www.dreamhorse.com/d/8/eventing/horses-for-sale.html"), ( "Hunter","http://www.dreamhorse.com/d/11/hunter/horses-for-sale.html"), ("Warmblood", "http://www.dreamhorse.com/list-horses/warmbloods.html")])
-dataDir="/Users/jbrosamer/PonyPricer/WarmbloodData/"
+dataDir="/Users/jbrosamer/PonyPricer/Batch/"
 scrapedIdFile=dataDir+"ScrapedIds.p"
 pbar=ProgressBar()
 if fromPickle and os.path.isfile(scrapedIdFile):
@@ -80,7 +80,7 @@ def scrapeSearch(key, batchSize=1000, batchStart=0):
 		startTime = datetime.now()
 		batchIds=ids[x:x+batchSize]
 		badIds=open(dataDir+"%sBadIds%iTo%i.txt"%(key,batchStart, batchSize+batchStart), 'wb')
-		print "Start scraping %i to %i"%(x, x+batchSize)
+		print "Start scraping %i to %i len(%i)"%(x, x+batchSize, len(batchIds))
 		for n, i in enumerate(batchIds):
 			try:
 				srs=scrapeAd(i)
@@ -98,10 +98,13 @@ def scrapeSearch(key, batchSize=1000, batchStart=0):
 		except Exception as e:
 			badIds.write(str(e)+"\n")
 		badIds.close()
-		elapsedSec=(datetime.now()-startTime).seconds
-		allDf=pd.concact(allDf)
-		pickle.dump(df, open(dataDir+"All%sAds.p"%(key), "wb"))
-		print "Time to scrape %i ids: %f minutes"%(len(ids), elapsedSec/60.)
+		allDf+=[df]
+	elapsedSec=(datetime.now()-startTime).seconds
+	print "Time to scrape %i ids: %f minutes"%(len(ids), elapsedSec/60.)
+	allDf=pd.concat(allDf)
+	allDf = allDf.reset_index().drop('index', axis = 1)
+	pickle.dump(allDf, open(dataDir+"All%sAds.p"%(key), "wb"))
+	
 	
     
     
@@ -221,5 +224,6 @@ def scrapeAd(id):
 
 if __name__ == "__main__":
 	#IdsFromKey("Warmblood", excludeScraped=False)
-	scrapeSearch("Warmblood")
+	for k in urlDict.keys()[:-1]:
+		scrapeSearch(k)
 

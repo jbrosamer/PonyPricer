@@ -23,6 +23,7 @@ lblColumns=['breed', 'color', 'gender']
 # Path of data
 priceMin=1000
 priceMax=100000
+pandasPath="/Users/jbrosamer/PonyPricer/Batch/WarmbloodAllAds.p"
 pandasPath="/Users/jbrosamer/PonyPricer/BatchBkup/DressageAllAds.p"
     
 def all_data(path=pandasPath):
@@ -33,9 +34,13 @@ def all_data(path=pandasPath):
     """
     df=pickle.load(open(pandasPath, 'rb'))    
     return df
+def cleanGender(row):
+    if "Mare" in row['gender'] or "Filly" in row['gender']:
+        return 1
+    return 0
 def clean_col(df):
     print "df.columns",df.columns
-    df=df[(df['age']>0) & (df['price']>=priceMin) &  (df['price']<=priceMax) & (df['inches']>50) & (df['gender'] != '')]
+    df=df[(df['age']>0) & (df['price']>=priceMin) &  (df['price']<=priceMax) & (df['inches']>50) & (df['gender'] != '') ]
     df = df.reset_index().drop('index', axis = 1)
     return df
 
@@ -50,9 +55,15 @@ def encode(df):
     """
 
     for col in lblColumns:
+        if col not in final_cols:
+            continue
         le = LabelEncoder()
         le.fit(df[col])
         df[col] = le.transform(df[col])
+        # if col=='gender':
+        #     oh=OneHotEncoder()
+        #     oh.fit(df[col])
+        #     df[col] = oh.transform(df[col])
     # Order columns with price as the last column
     df = df[final_cols]
     return df
