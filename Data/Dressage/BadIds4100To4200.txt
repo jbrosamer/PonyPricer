@@ -1,0 +1,4 @@
+1994209
+1986767
+1985288
+'ascii' codec can't encode character u'\xf6' in position 3: ordinal not in range(128)

@@ -1,0 +1,47 @@
+,id,breed,price,color,location,age,zip,height,temp,warmblood,sold,soldhere,forsale,forlease,registered,skills
+1995049,1995049,,10000,Black,Meyenburg Germany 16945,0.9534246575342465,16945,27 Inches,5,False,False,False,,,True,['Dressage']
+1994740,1994740,,9500,Chestnut,Huntsburg Ohio 44046,8.95890410958904,44046,14.2 hh,8,False,False,False,,,True,"['Dressage', 'Driving', 'Eventing', 'Jumping', 'Show Winner']"
+1995022,1995022,,4500,Chestnut,Washington Vermont 05675,9.043835616438356,5675,16.2 hh,5,False,False,False,,,True,"['Barrel Racing (In Training/Has Training)', 'Dressage (Prospect)', 'Drill Team (In Training/Has Training)', 'Hunter Under Saddle (Prospect)', 'Jumping (Prospect)']"
+1994996,1994996,,0,Chestnut,phelan California 92329,9.797260273972602,92329,16.2 hh,3,False,False,False,,,False,"['Dressage', 'Eventing', 'Foxhunter', 'Hunter', 'Jumping']"
+1994989,1994989,,35000,Grey,spring valley California 91978,12.046575342465754,91978,0 Inches,11,False,False,False,,,True,[]
+1994945,1994945,,5000,Black,Buckeye Arizona 85326,15.046575342465754,85326,14.3 hh,5,False,False,False,,,False,"['Barrel Racing', 'Dressage', 'Jumping', 'Ranch Work', 'Rodeo Queen Horse']"
+1932680,,,,,,,,,,,,,,,,
+1994856,1994856,,2500,Grey,Belmont New Hampshire 03220,15.550684931506849,3220,13.3 hh,7,False,False,False,,,True,"['All Around', 'Double Registered', 'Dressage', 'Endurance Riding', 'Trail Riding, Recreational']"
+1994840,1994840,,19000,Buckskin,Harrodsburg Kentucky 40330,3.7095890410958905,40330,15.2 hh,11,False,False,False,,,True,"['All Around', 'Baroque Horse', 'Dressage', 'Horsemanship']"
+1994825,1994825,,15000,Bay,Ojai California 93023,17.720547945205478,93023,17.1 hh,3,False,True,,,,True,"['Champion Pedigree', 'Dressage', 'Hunt Seat Equitation', 'Jumping', 'Show Winner']"
+1994830,1994830,,15000,Buckskin,Harrodsburg Kentucky 40330,4.545205479452055,40330,15.0 hh,11,False,False,False,,,True,"['All Around', 'Baroque Horse', 'Dressage', 'Horsemanship', 'Two-In-One Package']"
+1994915,1994915,,0,Bay,Keystone Heights Florida 32656,2.0383561643835617,32656,14.2 hh,11,False,False,False,,,True,"['Breeders Trust', 'Champion Pedigree', 'Country English Pleasure', 'Dressage', 'English Pleasure']"
+1994913,1994913,,5000,Bay,Keystone Heights Florida 32656,8.95890410958904,32656,16.1 hh,7,False,False,False,,,True,"['Country English Pleasure', 'Dressage', 'Driving', 'Endurance Riding', 'English Pleasure']"
+1994905,1994905,,5000,Grey,Keystone Heights Florida 32656,5.879452054794521,32656,15.2 hh,3,False,False,False,,,True,"['Country English Pleasure', 'Dressage', 'English Pleasure', 'Halter', 'Hunter']"
+1994584,1994584,,850,Bay,Hibbing Minnesota 55746,11.547945205479452,55746,14.3 hh,7,False,False,False,,,True,"['All Around', 'Barrel Racing', 'Dressage', 'Trail Riding, Recreational']"
+1963441,1963441,,12000,Brown,Millwood Virginia 22646,5.041095890410959,22646,17.0 hh,3,False,False,False,,,True,"['Broodmare', 'Dressage', 'Hunter', 'No Vices']"
+1990862,1990862,,15900,Bay,Livermore California 94550,14.8,94550,17.0 hh,2,False,True,,,,True,['Dressage (Shown/Competed/Performed)']
+1994837,1994837,,3800,Bay,Caledonia Michigan 49316,15.046575342465754,49316,17.0 hh,6,False,False,False,,,True,"['Dressage', 'Lesson Horse', 'No Vices', 'Trail Riding, Recreational', 'Vaulting']"
+1994811,1994811,,4000,Bay,Provo Utah 84601,3.7095890410958905,84601,0 Inches,4,False,False,False,,,True,"['Dressage', 'Eventing', 'Hunter', 'Hunter Under Saddle', 'Jumping']"
+1994797,1994797,,0,Black,Denver Colorado 80227,15.632876712328768,80227,16.0 hh,6,False,False,False,,,True,"['All Around', 'Dressage', 'Kid-Friendly Family Horse', 'Longe Line', 'Youth']"
+1971525,1971525,,5500,Chestnut,Millstone Twp New Jersey 08831,11.797260273972602,8831,16.2 hh,2,False,True,,,,True,"['Dressage', 'Eventing', 'Intermediate Rider Recommended', 'Jumping', 'Trail Riding, Recreational']"
+1994725,1994725,,15000,Bay,Kennett Square Pennsylvania 19348,13.046575342465754,19348,15.3 hh,4,False,False,False,,,False,"['All Around', 'Beginner-Safe Horse', 'Dressage', 'English Pleasure', 'Kid-Friendly Family Horse']"
+1994727,1994727,,0,Bay,Kennett Square Pennsylvania 19348,8.043835616438356,19348,17.3 hh,6,False,False,False,,,True,"['All Around', 'Dressage', 'Eventing', 'Jumping', 'Show Experience']"
+1994688,1994688,,10000,Buckskin,Snohomish Washington 98290,13.046575342465754,98290,16.1 hh,4,False,False,False,,,True,"['Dressage', 'Eventing', 'Jumping', 'Pony Club', 'Show Experience']"
+1994538,,,,,,,,,,,,,,,,
+1994445,1994445,,8000,Chestnut,Silver Spring Maryland 20905,15.046575342465754,20905,16.1 hh,7,False,False,False,,,False,"['Dressage', 'Jumping', 'Ridden English', 'Show Experience', 'Trail Riding, Recreational']"
+1994524,1994524,,14500,Bay,Berryville Virginia 22611,6.712328767123288,22611,15.1 hh,5,False,False,False,,,True,"['Dressage', 'Eventing', 'Hunter', 'Jumping', 'Pony Club']"
+1994716,1994716,,5000,Bay,St. Louis Missouri 63128,5.041095890410959,63128,16.0 hh,11,False,True,,,,True,"['Dressage', 'English Pleasure', 'Eventing', 'Hunter', 'Jumping']"
+1994630,1994630,,0,Chocolate,Metemora Michigan 48445,19.04931506849315,48445,16.1 hh,10,False,False,False,,,False,"['Country English Pleasure', 'Dressage', 'English Pleasure', 'Eventing']"
+1994628,1994628,,2500,Bay,Addy Washington 99101,14.046575342465754,99101,22 Inches,7,False,False,False,,,False,"['4H (Prospect)', 'All Around (Finished/Proficient)', 'Barrel Racing (In Training/Has Training)', 'Dressage (In Training/Has Training)', 'Jumping (In Training/Has Training)']"
+1994454,1994454,,3000,Chestnut,Woodstock Illinois 60098,7.712328767123288,60098,16.2 hh,5,False,False,False,,,True,"['All Around', 'Dressage', 'Hunter', 'Jumping', 'Sporthorse']"
+1994586,1994586,,7000,Chestnut,Grand Ledge Michigan 48837,9.043835616438356,48837,16.1 hh,4,False,False,False,,,True,"['Dressage (In Training/Has Training)', 'Eventing (In Training/Has Training)', 'Jumping (In Training/Has Training)']"
+1994426,1994426,,17000,Bay,Asheboro North Carolina 27205,9.547945205479452,27205,16.0 hh,1,False,False,False,,,True,"['Dressage', 'Eventing', 'Hunter', 'Hunter Under Saddle', 'Jumping']"
+1994429,1994429,,4000,Buckskin,Asheboro North Carolina 27205,8.043835616438356,27205,13.2 hh,2,False,True,,,,False,"['Dressage', 'Eventing', 'Hunter', 'Jumping', 'Lesson Horse']"
+1994400,1994400,,4500,Chestnut,Selma Oregon 97538,12.046575342465754,97538,15.1 hh,5,False,False,False,,,True,"['All Around (Shown/Competed/Performed)', 'Dressage (Finished/Proficient)', 'Gymkhana (Started)', 'Ranch Versatility (In Training/Has Training)', 'Trail Riding, Competitive (Shown/Competed/Performed)']"
+1994389,1994389,,50000,Chestnut,Warwick New York 10990,8.797260273972602,10990,15.2 hh,5,False,True,False,,,True,['Dressage']
+1994377,1994377,,3200,Bay,missoula Montana 59808,0.7095890410958904,59808,0 Inches,3,False,False,False,,,True,"['Dressage (Prospect)', 'Halter (Prospect)', 'Sporthorse (Prospect)', 'Weanling', 'Western Pleasure (Prospect)']"
+1994533,1994533,,10000,Bay,Cave Creek Arizona 85331,5.794520547945205,85331,16.1 hh,5,False,False,False,,,True,"['Dressage', 'Eventing', 'Jumping', 'Pony Club']"
+1994529,,,,,,,,,,,,,,,,
+1994521,1994521,,3400,White,Idaho Falls Idaho 83404,19.802739726027397,83404,15.2 hh,5,False,True,False,,,True,"['All Around', 'Beginner-Safe Horse', 'Dressage (In Training/Has Training)', 'Jumping (Finished/Proficient)', 'Western Riding']"
+1994485,1994485,,2500,Palomino,Stanwood Washington 98292,7.041095890410959,98292,15.2 hh,11,False,False,False,,,False,"['Dressage', 'Ridden English', 'Ridden Western', 'Western Pleasure', 'Western Riding']"
+1994355,1994355,,10000,Black,Eagle Idaho 83616,19.04931506849315,83616,17.3 hh,4,False,False,False,,,True,['Dressage']
+1993312,1993312,,6500,Bay,Yuma Arizona 85365,16.04931506849315,85365,16.0 hh,3,False,False,False,,,False,"['Dressage', 'Pack Horse', 'Western Dressage']"
+1994326,1994326,,5000,Chestnut,Columbia Missouri 65202,15.046575342465754,65202,17.2 hh,4,False,False,False,,,False,"['Dressage', 'Hunter']"
+1993344,1993344,,2500,Smokey Black,Billings Montana 59101,3.0383561643835617,59101,14.3 hh,4,False,False,False,,,False,"['Cowhorse', 'Draft', 'Dressage', 'Driving', 'English Pleasure']"
+1994469,1994469,,1500,Chestnut,Fuquay Varina North Carolina 27526,13.8,27526,16.1 hh,3,False,False,False,,,True,"['Broodmare', 'Dressage', 'Hunter', 'Jumping']"

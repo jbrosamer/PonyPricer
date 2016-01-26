@@ -16,6 +16,7 @@ import os
 import datetime as dt
 from collections import OrderedDict
 
+import inspect
 import pandas as pd
 import numpy as np
 import mysql.connector
@@ -23,6 +24,11 @@ import pickle, glob
 import math
 
 import categories as cat
+
+def lineno():
+    """Returns the current line number in our program."""
+    return inspect.currentframe().f_back.f_lineno
+
 
 class dbConnect():
     '''
@@ -54,8 +60,10 @@ def pickleToDataframe(path="/Users/jbrosamer/PonyPricer/Batch/DressageId*.p"):
         print "opening",f
         p=pickle.load(open(f, 'rb'))
         dfList.append(p)
+        print "N Rows %s %i"%(f, len(p))
     df = pd.concat(dfList, axis = 0)
     df = df.reset_index().drop('index', axis = 1)
+    print "Total rows",len(df), "Line ", lineno()
     return df
 def inches(row):
     inches=np.nan
@@ -73,7 +81,7 @@ def skillToStr(row):
     try:
         if pd.isnull(row['skills']):
             return ""
-        return ",".join(row['skills'])
+        return ",".join(row['skills'])[:50]
     except:
         return ""
 def cleanBreed(row):
@@ -83,6 +91,11 @@ def cleanBreed(row):
         if b in row['breedStr']:
             return b
     return "Unknown"
+def breedGroup(row):
+    try:
+        return cat.groupDict[row['breed']]
+    except:
+        return "Other"
 def cleanGender(row):
     if row['gender'] in cat.genders:
         return str(row['gender'])
@@ -93,19 +106,28 @@ def cleanGender(row):
     return ""
 
 def cleanDf(df):
-
-    df=df[df.id > 0]
+    print "Total rows",len(df), "Line ", lineno()
+    df=df[df.id >= 0]
+    print "Total rows",len(df), "Line ", lineno()
     df=df[df.price > 0]
+    print "Total rows",len(df), "Line ", lineno()
    # df=df[df.price < 100000]
-    df=df[df.age >0]
+    df=df[df.age >=0]
+    print "Total rows",len(df), "Line ", lineno()
     df['inches']=df.apply(inches, axis=1)
     df['skills']=df.apply(skillToStr, axis=1)
     df['breed']=df.apply(cleanBreed, axis=1)
     df['gender']=df.apply(cleanGender, axis=1)
     df['lnprice']=df.apply(lambda x: math.log(x['price']), axis=1)
+    print "Total rows",len(df), "Line ", lineno()
+    df['breedGroup']=df.apply(breedGroup, axis=1)
+    df['dressage']=np.where("Dressage" in df['skills'], 1, 0)
+    df['hunter']=np.where("Hunter" in df['skills'], 1, 0)
+    df['jumper']=np.where("Jumper" in df['skills'], 1, 0)
+    df['eventing']=np.where("Eventing" in df['skills'], 1, 0)
+    print "Total rows",len(df), "Line ", lineno()
     badCols=['breedStr', 'desc', 'location', 'height']
     df=df.drop(badCols, axis=1)
-    
     df = df.reset_index().drop('index', axis = 1)
     #print "df cols",df.columns()
     return df
@@ -124,14 +146,16 @@ def main():
 
     connect = dbConnect(host = 'localhost', user = 'root',
             passwd = 'jbrosamer', db = 'horses')
-    keyword="Dressage"
+    keyword="All"
     with connect:
-            path="/Users/jbrosamer/PonyPricer/Batch/%sId*.p"%keyword
+            path="/Users/jbrosamer/PonyPricer/Batch/%s*Ads.p"%keyword
             tablename = "%sAds"%keyword
 
             # Run Scraper
-            df=pickleToDataframe()
+            df=pickleToDataframe(path)
+            print "Total rows",len(df), "Line ", lineno()
             df=cleanDf(df)
+            print "Total rows",len(df), "Line ", lineno()
 
 
             # Make sure dtypes fit for MySQL db
@@ -144,16 +168,16 @@ def main():
                     dtype[df.columns[i]] = 'INTEGER'
                 elif df.columns[i] in ['price', 'height', 'age', 'lnprice']:
                     dtype[df.columns[i]] = 'REAL'
-                elif df.columns[i] in ['breedStr', 'desc', 'location', 'height']:
+                elif df.columns[i] in ['breedStr', 'desc', 'location', 'height', 'skills']:
                     dtype[df.columns[i]] = 'TEXT'
                 else:
                     dtype[df.columns[i]] = 'VARCHAR(50)'
             print dtype
-            x = pd.DataFrame({'x': [1, 2, 3], 'y': [3, 4, 5]})
             df.to_sql(name = tablename, con = connect.con,
                       flavor = 'mysql', if_exists='replace')
-            pickle.dump(df, open("/Users/jbrosamer/PonyPricer/Batch/%sAllAds.p"%keyword, 'wb'))
-            df.to_csv("/Users/jbrosamer/PonyPricer/Batch/%sAllAds.csv"%keyword)
+            print "N rows",len(df)
+            pickle.dump(df, open("/Users/jbrosamer/PonyPricer/Batch/ConcatAds.p", 'wb'))
+            df.to_csv("/Users/jbrosamer/PonyPricer/Batch/ConcatAds.csv")
 
             # Send to MySQL database, if table exists, continue to next
             try:

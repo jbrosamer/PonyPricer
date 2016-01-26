@@ -24,8 +24,9 @@ cellColMap={32: 'for lease', 34: 'for sale', 2: 'zip', 36: 'price', 38: 'skills'
 #can just get ids then use to look at ads
 fromPickle=True
 scrapedIds=[]
-urlDict=OrderedDict([('Dressage',"http://www.dreamhorse.com/d/5/dressage/horses-for-sale.html"), ( "Jumping","http://www.dreamhorse.com/d/12/jumping/horses-for-sale.html"), ( "Eventing","http://www.dreamhorse.com/d/8/eventing/horses-for-sale.html"), ( "Hunter","http://www.dreamhorse.com/d/11/hunter/horses-for-sale.html"), ("Warmblood", "http://www.dreamhorse.com/list-horses/warmbloods.html")])
-dataDir="/Users/jbrosamer/PonyPricer/Batch/"
+urlDict=OrderedDict([('Dressage',"http://www.dreamhorse.com/d/5/dressage/horses-for-sale.html"), ( "Jumping","http://www.dreamhorse.com/d/12/jumping/horses-for-sale.html"), ( "Eventing","http://www.dreamhorse.com/d/8/eventing/horses-for-sale.html"), ( "Hunter","http://www.dreamhorse.com/d/11/hunter/horses-for-sale.html"), ("Warmblood", "http://www.dreamhorse.com/list-horses/warmbloods.html"), ("AllAround", "http://www.dreamhorse.com/d/33/all-around/horses-for-sale.html")])
+urlDict=OrderedDict([("GreatLakesUSA", "http://www.dreamhorse.com/a/horses-for-sale-in-the-great-lakes-usa-area.html") ,("MountainUSA", "http://www.dreamhorse.com/a/horses-for-sale-in-the-mountain-usa-area.html") ,("NortheastUSA", "http://www.dreamhorse.com/a/horses-for-sale-in-the-northeast-usa-area.html") ,("NorthwestUSA", "http://www.dreamhorse.com/a/horses-for-sale-in-the-northwest-usa-area.html") ,("PrairieUSA", "http://www.dreamhorse.com/a/horses-for-sale-in-the-prairie-usa-area.html") ,("SoutheastUSA", "http://www.dreamhorse.com/a/horses-for-sale-in-the-southeast-usa-area.html") ,("SouthwestUSA", "http://www.dreamhorse.com/a/horses-for-sale-in-the-southwest-usa-area.html") ,("EasternCANADA", "http://www.dreamhorse.com/a/horses-for-sale-in-the-eastern-canada-area.html") ,("WesternCANADA", "http://www.dreamhorse.com/a/horses-for-sale-in-the-western-canada-area.html") ])
+dataDir="/Users/jbrosamer/PonyPricer/BatchArea/"
 scrapedIdFile=dataDir+"ScrapedIds.p"
 pbar=ProgressBar()
 if fromPickle and os.path.isfile(scrapedIdFile):
@@ -58,7 +59,7 @@ def IdsFromKey(key, excludeScraped=True):
 		print "Found %s %i ids"%(key, len(ids))
 	print "Done with len(ids)",len(ids)
 	keyIds=set(ids)
-	if excludeScraped:
+	if excludeScraped and os.path.isfile(scrapedIdFile):
 		scrapedIds=sorted(list(pickle.load(open(scrapedIdFile, 'rb'))))
 	else:
 		scrapedIds=[]
@@ -224,6 +225,5 @@ def scrapeAd(id):
 
 if __name__ == "__main__":
 	#IdsFromKey("Warmblood", excludeScraped=False)
-	for k in urlDict.keys()[:-1]:
+	for k in urlDict.keys():
 		scrapeSearch(k)
-

@@ -1,0 +1,4 @@
+,id,breed,price,color,location,age,zip,height,temp,warmblood,sold,soldhere,forsale,forlease,registered,skills
+1458843,1458843,,0,Bay,Cape Coral Florida 33990,11.797260273972602,33990,16.3 hh,11,False,False,False,,,True,"['Dressage', 'Eventing', 'Hunter', 'Jumping']"
+1073812,1073812,,101,Chestnut,Cape Coral Florida 33990,12.046575342465754,33990,16.1 hh,5,False,False,False,,,True,"['Broodmare (Prospect)', 'Dressage', 'Eventing', 'Hunter', 'Hunter Under Saddle']"
+929703,,,,,,,,,,,,,,,,

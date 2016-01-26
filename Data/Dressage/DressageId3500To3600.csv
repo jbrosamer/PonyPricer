@@ -1,0 +1,101 @@
+,id,breed,price,color,location,age,zip,height,temp,warmblood,sold,soldhere,forsale,forlease,registered,skills
+2000379,2000379,,12500,Buckskin,Covington Washington 98042,6.041095890410959,98042,16.0 hh,11,False,False,False,,,True,"['Dressage', 'Hunter', 'Sporthorse', 'Western Pleasure']"
+2000327,2000327,,55000,Black,Careywood Idaho 83809,4.712328767123288,83809,17.0 hh,3,False,False,False,,,True,"['Dressage', 'Sporthorse']"
+1955681,1955681,,15000,Bay,West Chester Pennsylvania 19382,11.797260273972602,19382,16.2 hh,2,False,False,False,,,True,"['Dressage', 'Rider Level: Amateur', 'Show Experience', 'Trail Riding, Recreational']"
+1955683,1955683,,12000,Bay,West Chester Pennsylvania 19382,9.882191780821918,19382,16.0 hh,2,False,False,False,,,True,"['All Around', 'Dressage', 'Eventing', 'Jumping', 'Show Experience']"
+2000317,2000317,,65000,Black Bay,Careywood Idaho 83809,4.712328767123288,83809,17.1 hh,5,False,False,False,,,True,"['Dressage', 'Hunter', 'Sporthorse']"
+2000319,2000319,,48000,Black,Careywood Idaho 83809,4.712328767123288,83809,16.2 hh,4,False,False,False,,,True,"['Dressage', 'Hunter', 'Sporthorse']"
+2000329,2000329,,45000,Black Bay,Careywood Idaho 83809,4.712328767123288,83809,16.3 hh,4,False,False,False,,,True,"['Dressage', 'Eventing', 'Hunter', 'Jumping', 'Sporthorse']"
+2000567,2000567,,1500,Silver,Cornelius Oregon 97113,11.043835616438356,97113,13.3 hh,2,False,True,,,,False,"['Dressage (In Training/Has Training)', 'Jumping (In Training/Has Training)', 'Pony Breed', 'Pony Club (Prospect)']"
+2000555,2000555,,900,Smokey Black,Ontario Oregon 97914,2.791780821917808,97914,14.3 hh,3,False,False,False,,,False,"['Dressage (Prospect)', 'Hunter (Prospect)', 'Natural Horsemanship Training (Finished/Proficient)', 'Show Experience (In Training/Has Training)', 'Started Under Saddle (In Training/Has Training)']"
+2000302,2000302,,18000,Grey,Arcata California 95521,14.717808219178082,95521,14.3 hh,5,False,False,False,,,True,"['Dressage (Awards Earned)', 'Eventing (In Training/Has Training)', 'Jumping (Shown/Competed/Performed)', 'Pony Club (Awards Earned)']"
+1998856,1998856,,1500,Grey,Cool California 95614,4.712328767123288,95614,14.3 hh,5,False,True,,,,True,"['Barrel Racing', 'Dressage', 'Eventing', 'Hunter']"
+2000278,2000278,,10000,Grey,Windsor South Carolina 29856,5.041095890410959,29856,15.1 hh,2,False,True,,,,False,"['Dressage', 'Eventing', 'Foxhunter', 'Hunter', 'Jumping']"
+2000295,2000295,,2500,Grey,Vashon Island Washington 98070,9.95890410958904,98070,16.0 hh,7,False,False,False,,,True,"['Broodmare', 'Dressage', 'Eventing', 'Jumping', 'Sporthorse']"
+2000504,2000504,,8500,Grey,Quakertown Pennsylvania 18951,10.043835616438356,18951,15.3 hh,5,False,False,False,,,False,"['Dressage (In Training/Has Training)', 'Hunter Under Saddle (Awards Earned)', 'Show Winner (Shown/Competed/Performed)']"
+1998210,1998210,,15000,Grey,Brookeville Maryland 20833,14.046575342465754,20833,16.0 hh,6,False,False,False,,,True,"['Dressage', 'Eventing', 'Jumping', 'Trail Riding, Recreational']"
+2000491,,,,,,,,,,,,,,,,
+2000476,2000476,,25000,Grey,Moorpark California 93021,11.797260273972602,93021,17.0 hh,4,False,False,False,,,True,"['Dressage (Shown/Competed/Performed)', 'Eventing (Shown/Competed/Performed)', 'Hunter (In Training/Has Training)']"
+2000440,2000440,,0,Bay,Sandpoint Idaho 83864,17.04931506849315,83864,15.3 hh,3,False,False,False,,,True,"['Beginner-Safe Horse', 'Dressage', 'English Pleasure', 'Hunt Seat Equitation', 'Hunter']"
+2000430,2000430,,12000,Bay,greeneville Tennessee 37745,9.043835616438356,37745,15.1 hh,2,False,False,False,,,False,"['All Around', 'Dressage', 'Eventing', 'Foxhunter']"
+2000259,2000259,,15000,Black,Genesee Idaho 83832,4.879452054794521,83832,15.3 hh,3,False,True,False,,,True,"['Dressage', 'Hunter', 'Show Hack']"
+2000249,2000249,,18000,Black Bay,Chattanooga Tennessee 37421,4.712328767123288,37421,15.3 hh,4,False,False,False,,,True,"['Champion Pedigree', 'Dressage', 'Sporthorse']"
+1999890,1999890,,3000,Bay,Kennewick Washington 99338,10.797260273972602,99338,15.0 hh,4,False,True,False,,,False,"['4H (Finished/Proficient)', 'Dressage (In Training/Has Training)', 'English Pleasure (Finished/Proficient)', 'Jumping (Prospect)', 'Saddle Seat (Finished/Proficient)']"
+1999883,1999883,,2500,Black,Maricopa Arizona 85139,9.043835616438356,85139,16.3 hh,4,False,False,False,,,False,"['All Around', 'Dressage', 'Eventing', 'Hunter', 'Western Riding']"
+1999075,1999075,,9000,Bay,Blairstown New Jersey 07825,1.7917808219178082,7825,15.2 hh,4,False,False,False,,,True,"['Dressage', 'Hunter', 'Jumping']"
+2000378,2000378,,7500,Bay,Pendleton South Carolina 29670,14.046575342465754,29670,15.0 hh,6,False,False,False,,,True,"['Dressage', 'English Pleasure', 'Hunter Under Saddle', 'Western Dressage', 'Western Pleasure']"
+2000356,2000356,,22000,Bay,Apopka Florida 32703,5.041095890410959,32703,16.0 hh,11,False,False,False,,,False,"['Dressage', 'Eventing', 'Jumping']"
+2000347,2000347,,35000,Chestnut,Apopka Florida 32703,6.041095890410959,32703,16.2 hh,11,False,False,False,,,False,"['Dressage', 'Eventing', 'Jumping']"
+2000343,2000343,,27000,Bay,Apopka Florida 32703,6.041095890410959,32703,16.0 hh,11,False,False,False,,,False,"['Dressage', 'Eventing', 'Hunt Seat Equitation', 'Hunter', 'Hunter Under Saddle']"
+2000342,2000342,,22000,Grey,Apopka Florida 32703,7.041095890410959,32703,16.1 hh,11,False,False,False,,,False,"['Dressage', 'Eventing']"
+2000341,2000341,,29000,Chestnut,Apopka Florida 32703,13.046575342465754,32703,17.2 hh,11,False,False,False,,,True,"['Dressage', 'Hunt Seat Equitation']"
+2000340,2000340,,25000,Bay,Apopka Florida 32703,8.043835616438356,32703,15.1 hh,3,False,False,False,,,False,"['Dressage', 'Eventing', 'Hunt Seat Equitation', 'Hunter', 'Jumping']"
+2000213,2000213,,1000,Bay,Walkerton Indiana 46574,17.04931506849315,46574,16.0 hh,4,False,False,False,,,False,"['Dressage', 'Drill Team', 'Intermediate Rider Recommended', 'Pack Horse']"
+2000150,2000150,,2000,Bay,Plymouth Michigan 48187,15.046575342465754,48187,15.3 hh,3,False,True,False,,,True,"['Dressage (Shown/Competed/Performed)', 'Hunter Under Saddle', 'Rider Level: Amateur', 'Trail Riding, Recreational', 'Western Dressage']"
+1998005,1998005,,900,Sorrel,Buchanan Michigan 49107,8.043835616438356,49107,14.3 hh,7,False,True,False,,,False,"['Dressage', 'Halter', 'Trail Riding, Recreational', 'Western Dressage', 'Western Pleasure']"
+2000318,2000318,,40000,Grey, Florida 33592,8.043835616438356,33592,15.3 hh,6,False,False,False,,,True,['Dressage']
+1988128,1988128,,6500,Bay,Greybull Wyoming 82426,11.882191780821918,82426,15.1 hh,6,False,True,,,,True,"['All Around (Finished/Proficient)', 'Dressage (In Training/Has Training)', 'Lesson Horse (Finished/Proficient)', 'Trail Riding, Recreational (Finished/Proficient)', 'Western Dressage (In Training/Has Training)']"
+1978331,1978331,,6500,Grey,Lexington Virginia 24450,15.046575342465754,24450,14.1 hh,4,False,False,False,,,False,"['Dressage', 'Eventing', 'Foxhunter', 'Jumping', 'Pony Club']"
+2000069,2000069,,5000,Bay,Ortonville Michigan 48428,3.5424657534246577,48428,14.3 hh,5,False,False,False,,,True,"['Dressage (Prospect)', 'Pleasure Driving (Prospect)', 'Started Under Saddle', 'Trail Riding, Recreational (Prospect)', 'Western Dressage (Prospect)']"
+2000007,2000007,,6000,Brown,Bridger Montana 59014,2.6246575342465754,59014,15.0 hh,3,False,False,False,,,False,"['All Around', 'Dressage', 'Harness', 'Pony Club']"
+1999866,1999866,,4500,Chestnut,new castle Pennsylvania 16101,4.879452054794521,16101,14.2 hh,2,False,True,,,,True,"['Broodmare', 'Dressage', 'Hunter', 'Sporthorse', 'Western Pleasure']"
+2000294,2000294,,20000,Chestnut,Rogue river Oregon 97537,16.04931506849315,97537,13.1 hh,2,False,False,False,,,False,"['Barrel Racing (Money/Points Earned)', 'Champion (Awards Earned)', 'Cowboy Racing (Finished/Proficient)', 'Dressage (In Training/Has Training)', 'Kid-Friendly Family Horse (Shown/Competed/Performed)']"
+2000280,2000280,,0,Chestnut,Lexington Kentucky 40511,15.884931506849314,40511,16.2 hh,6,False,False,False,,,True,"['Dressage (Finished/Proficient)', 'Eventing (Shown/Competed/Performed)', 'Trail Riding, Recreational (Finished/Proficient)']"
+2000243,2000243,,25000,Dun,Franklin Tennessee 37069,9.797260273972602,37069,14.2 hh,2,False,False,False,,,True,"['Beginner-Safe Horse (Shown/Competed/Performed)', 'Dressage (Finished/Proficient)', 'Hunt Seat Equitation (Shown/Competed/Performed)', 'Hunter (Shown/Competed/Performed)', 'Hunter Under Saddle (Shown/Competed/Performed)']"
+1983356,1983356,,5000,Chestnut,Cave Creek Arizona 85331,14.8,85331,16.2 hh,3,False,True,False,,,True,"['Dressage (In Training/Has Training)', 'Hunter', 'Jumping', 'Trail Riding, Recreational']"
+2000134,2000134,,4000,Bay,bartlett Illinois 60102,5.879452054794521,60102,16.1 hh,4,False,True,False,,,True,"['Dressage', 'Hunter', 'Jumping']"
+2000122,2000122,,2500,Bay,Bagdad Kentucky 40003,4.041095890410959,40003,16.2 hh,2,False,True,,,,False,"['Dressage', 'Eventing', 'Foxhunter', 'Hunter', 'Jumping']"
+2000124,2000124,,12500,Bay,Athens Georgia 30607,7.712328767123288,30607,16.1 hh,4,False,False,False,,,True,"['Dressage (In Training/Has Training)', 'English Pleasure (Finished/Proficient)', 'Eventing (In Training/Has Training)', 'Foxhunter (Finished/Proficient)', 'Jumping (Finished/Proficient)']"
+2000118,2000118,,40000,Chestnut,Lebanon Connecticut 06231,11.715068493150685,6231,16.1 hh,11,False,False,False,,,True,['Dressage']
+2000086,2000086,,2500,Bay,Anacortes Washington 98221,17.04931506849315,98221,16.1 hh,4,False,False,False,,,False,['Dressage']
+2000082,2000082,,5000,Chestnut,Crestwood Kentucky 40014,4.794520547945205,40014,15.3 hh,4,False,True,,,,True,"['Dressage', 'Eventing', 'Hunter Under Saddle', 'Lesson Horse']"
+2000170,2000170,,2500,Black,OAK HILL Florida 32759,10.043835616438356,32759,14.3 hh,6,False,False,False,,,True,"['Broodmare', 'Dressage', 'Halter', 'Hunter', 'Western Riding']"
+2000166,2000166,,3500,Black,OAK HILL Florida 32759,14.046575342465754,32759,14.3 hh,11,False,False,False,,,True,"['Broodmare', 'Dressage', 'Hunter', 'Western Pleasure']"
+2000148,2000148,,4000,Chestnut,Sermerieu France 38510,10.043835616438356,38510,0 Inches,11,False,False,False,,,False,"['Dressage', 'Endurance Riding', 'Hunter', 'Jumping', 'Western Riding']"
+1982158,1982158,,29000,Bay,Encinitas California 92024,14.046575342465754,92024,16.2 hh,3,False,False,False,,,True,['Dressage']
+1999802,1999802,,8500,Bay,OREGON CITY Oregon 97045,1.5424657534246575,97045,0 Inches,5,False,True,False,,,True,"['Dressage (Prospect)', 'Driving (Prospect)', 'Eventing (Prospect)', 'Jumping (Prospect)']"
+1999978,1999978,,45000,Black Bay,Pleasant Prairie Wisconsin 53142,13.046575342465754,53142,16.2 hh,7,False,True,,,,True,['Dressage']
+1999958,1999958,,25000,Chestnut,Agoura California 91301,21.052054794520547,91301,16.2 hh,5,False,False,False,,,True,['Dressage (Finished/Proficient)']
+1996477,,,,,,,,,,,,,,,,
+2000119,,,,,,,,,,,,,,,,
+2000111,2000111,,0,Grey,Coal City Illinois 60416,20.89041095890411,60416,25 Inches,2,False,False,False,,,False,"['All Around', 'Beginner-Safe Horse', 'Dressage', 'English Pleasure']"
+1999859,1999859,,16500,Chestnut,The Plains Virginia 20198,8.715068493150685,20198,16.0 hh,6,False,False,False,,,True,"['Dressage', 'Eventing']"
+1999843,1999843,,4500,Sorrel,Pomeroy Washington 99347,5.041095890410959,99347,16.2 hh,3,False,False,False,,,True,"['Barrel Racing', 'Dressage', 'Jumping', 'Ranch Horse Riding', 'Roping, All Around']"
+1986497,1986497,,3000,Bay,Street Maryland 21154,3.8767123287671232,21154,15.3 hh,11,False,True,False,,,True,"['Dressage', 'Eventing', 'Hunter', 'Jumping']"
+1979156,1979156,,6000,Black Bay,Millstone Township New Jersey 08535,3.8767123287671232,8535,16.2 hh,5,False,False,False,,,True,"['All Around', 'Dressage (Prospect)', 'Eventing (Prospect)', 'Foxhunter (Prospect)', 'Jumping (Prospect)']"
+2000009,2000009,,20000,Bay,Rochester New York 14534,8.043835616438356,14534,15.3 hh,4,False,False,False,,,False,['Dressage']
+1999999,1999999,,4000,Bay,zionsville Indiana 46077,7.041095890410959,46077,16.0 hh,6,False,True,,,,True,"['Dressage', 'Eventing', 'Hunter', 'Jumping', 'Pony Club']"
+1999987,1999987,,2500,Bay,McKinleyville California 95519,8.882191780821918,95519,15.2 hh,6,False,False,False,,,True,"['Barrel Racing', 'Dressage', 'Endurance Riding', 'Gymkhana', 'Jumping']"
+1998455,1998455,,15500,Bay,Fort Collins Colorado 80524,10.715068493150685,80524,16.0 hh,5,False,False,False,,,True,['Dressage']
+1997118,1997118,,40000,Bay,Longmont Colorado 80504,11.797260273972602,80504,17.1 hh,6,False,False,False,,,True,"['Dressage (Started)', 'Jumping (Awards Earned)']"
+1999775,1999775,,2300,Bay,Tekamah Nebraska 68061,8.043835616438356,68061,15.2 hh,3,False,False,False,,,False,"['Draft', 'Dressage', 'Natural Horsemanship Training', 'Trail Riding, Recreational', 'Western Dressage']"
+1999780,1999780,,4500,Bay,Hendersonville North Carolina 28792,5.041095890410959,28792,15.1 hh,3,False,True,,,,True,"['Broodmare', 'Dressage', 'Eventing', 'Hunt Seat Equitation', 'Hunter']"
+1998046,1998046,,15000,Bay,Harbor Springs Michigan 49740,10.882191780821918,49740,16.3 hh,3,False,True,,,,True,"['Dressage', 'Eventing', 'Hunter Under Saddle', 'Jumping', 'Pony Club']"
+1999742,1999742,,45000,Bay,Marshall Virginia 20115,4.041095890410959,20115,17.2 hh,11,False,False,False,,,True,['Dressage (Shown/Competed/Performed)']
+1982671,1982671,,3000,Black Bay,West Chester Pennsylvania 19380,13.550684931506849,19380,14.3 hh,5,False,False,False,,,True,"['All Around', 'Dressage', 'English Pleasure', 'Eventing', 'Intermediate Rider Recommended']"
+1993311,1993311,,7500,Grey,Boerne Texas 78015,15.046575342465754,78015,15.3 hh,5,False,True,False,,,True,['Dressage (In Training/Has Training)']
+1934540,1934540,,30000,Bay,Canby Oregon 97013,11.797260273972602,97013,16.0 hh,4,False,True,False,,,False,"['Dressage', 'Jumping']"
+1999478,1999478,,0,Black,Ramona California 92065,7.712328767123288,92065,16.1 hh,2,False,False,False,,,True,[]
+1999480,1999480,,20000,Bay,binghamton New York 13905,5.627397260273972,13905,16.1 hh,3,False,True,,,,True,"['Dressage', 'Eventing', 'Foxhunter', 'Hunter', 'Jumping']"
+1999942,,,,,,,,,,,,,,,,
+1999939,1999939,,450,Sorrel,Axtell Texas 76624,0.7917808219178082,76624,0 Inches,4,False,False,False,,,False,"['Dressage', 'Halter', 'Hunter', 'Hunter Under Saddle']"
+1999930,1999930,,4500,Bay Roan,Axtell Texas 76624,2.6246575342465754,76624,15.0 hh,3,False,False,False,,,False,"['All Around', 'Dressage', 'Homozygous Black', 'Stallion, Breeding', 'Western Pleasure']"
+1983925,1983925,,3500,Chestnut,Round Rock Texas 78681,18.802739726027397,78681,17.2 hh,6,False,True,,,,True,"['All Around (In Training/Has Training)', 'Dressage (Money/Points Earned)', 'Hunter Under Saddle (Finished/Proficient)', 'Jumping (Awards Earned)', 'Trail Riding, Recreational (Finished/Proficient)']"
+1999921,1999921,,0,Grey,Monroe North Carolina 28110,16.04931506849315,28110,15.3 hh,5,False,False,False,,,True,"['Dressage (Shown/Competed/Performed)', 'Eventing (Shown/Competed/Performed)', 'Foxhunter (Shown/Competed/Performed)', 'Jumping (Shown/Competed/Performed)', 'No Vices']"
+1999698,1999698,,17000,Bay,sandown New Hampshire 03873,7.712328767123288,3873,15.2 hh,4,False,False,False,,,False,"['All Around (Finished/Proficient)', 'Dressage (Awards Earned)', 'Eventing (In Training/Has Training)', 'Foxhunter (Started)', 'Jumping (Awards Earned)']"
+1999899,1999899,,12500,Grey,Kirkwood Pennsylvania 17536,3.7095890410958905,17536,0 Inches,4,False,False,False,,,True,"['All Around', 'Baroque Horse', 'Broodmare', 'Dressage', 'Driving']"
+1999897,1999897,,12500,Grey,Kirkwood Pennsylvania 17536,3.791780821917808,17536,16.0 hh,3,False,True,,,,True,"['Baroque Horse', 'Broodmare', 'Dressage', 'Driving', 'Eventing']"
+1956396,1956396,,8000,Black,Cottonwood California 96022,7.712328767123288,96022,17.0 hh,2,False,False,False,,,False,"['Baroque Horse', 'Dressage', 'Mounted Patrol', 'Trail Riding, Recreational']"
+1999670,1999670,,20000,Bay,Flower Mound Texas 75022,8.043835616438356,75022,16.0 hh,3,False,False,False,,,True,"['Dressage', 'Hunter', 'Jumping']"
+1999508,1999508,,4000,Brown,Big Lake Minnesota 55309,15.632876712328768,55309,16.2 hh,6,False,False,False,,,True,"['Dressage', 'Eventing', 'Pony Club', 'Racing, Retired Racehorse']"
+1999867,1999867,,15000,Bay,las vegas Nevada 89143,12.046575342465754,89143,16.1 hh,3,False,False,False,,,False,"['Dressage', 'Hunter', 'Jumping']"
+1999845,1999845,,2250,Bay,zionsville Indiana 46077,9.043835616438356,46077,16.0 hh,3,False,False,False,,,True,"['Dressage', 'Eventing', 'Hunter', 'Hunter Under Saddle', 'Pony Club']"
+1998680,1998680,,3500,Chestnut,Lanesboro Minnesota 55949,2.5424657534246577,55949,14.3 hh,3,False,False,False,,,True,"['Dressage', 'Driving (In Training/Has Training)']"
+1998962,,,,,,,,,,,,,,,,
+1998961,,,,,,,,,,,,,,,,
+1999816,1999816,,5000,Chestnut,Derry New Hampshire 03038,12.046575342465754,3038,13.2 hh,11,False,False,False,,,True,"['Dressage', 'Eventing', 'Hunter', 'Hunter Under Saddle', 'Jumping']"
+1999810,1999810,,10000,Bay,Lexington Virginia 24450,13.046575342465754,24450,14.2 hh,7,False,False,False,,,True,"['Broodmare', 'Dressage', 'Hunter']"
+1999794,,,,,,,,,,,,,,,,
+1999776,1999776,,1,Bay,Detroit Michigan 39649,15.046575342465754,39649,16.2 hh,11,False,False,False,,,True,"['Dressage', 'Eventing', 'Hunter', 'Jumping', 'Racing']"
+1999758,1999758,,5500,Bay,San Tan Valley Arizona 85140,10.715068493150685,85140,16.0 hh,5,False,False,False,,,True,"['Broodmare', 'Dressage', 'Hunter', 'Sporthorse']"
+1999756,1999756,,2500,Grey,Lincoln Rhode Island 02865,18.553424657534247,2865,15.3 hh,6,False,False,False,,,True,"['Dressage', 'Saddle Seat']"

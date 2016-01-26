@@ -1,0 +1,1 @@
+'ascii' codec can't encode character u'\u015a' in position 0: ordinal not in range(128)

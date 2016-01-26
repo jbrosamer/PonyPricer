@@ -1,0 +1,7 @@
+2012278
+2012072
+2011929
+2009980
+2009736
+2008774
+'ascii' codec can't encode character u'\xa0' in position 10: ordinal not in range(128)

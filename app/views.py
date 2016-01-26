@@ -69,6 +69,8 @@ def output():
 	htPlt.title="Estimated price with height"
 	htPlt.x_labels=["%i in."%i for i in heightRange]
 	htPlt.add("Price ($)", pred[heightStart:heightStart+len(heightRange)])
+	htPlt.x_title="Height (inches)"
+	htPlt.y_title="Estimated price ($)"
 	#agePlt.render_to_file("agechart.svg")
 
 	perDiff=int(100.*pred[0]/askingPrice)
@@ -78,7 +80,8 @@ def output():
 		headerStr="$%i is probably a good deal"%askingPrice
 	else:
 		headerStr="$%i is probably not a good deal"%askingPrice
-	genderStr="A similar %s would cost $%i."%(inputDict['gender'][1], int(pred[1]))
-	ageStr="A similar %s year old would cost $%i. A similar %s year old would cost $%i."%(int(inputDict['age'][2]), int(pred[2]), int(inputDict['age'][3]), int(pred[3]))
-	htStr="A similar %s inch tall horse would cost $%i. A similar %s inch tall horse would cost $%i."%(inputDict['inches'][4], int(pred[4]), inputDict['inches'][5], int(pred[5]))
+	ageStr=genderStr=htStr=""
+	# genderStr="A similar %s would cost $%i."%(inputDict['gender'][1], int(pred[1]))
+	# ageStr="A similar %s year old would cost $%i. A similar %s year old would cost $%i."%(int(inputDict['age'][2]), int(pred[2]), int(inputDict['age'][3]), int(pred[3]))
+	# htStr="A similar %s inch tall horse would cost $%i. A similar %s inch tall horse would cost $%i."%(inputDict['inches'][4], int(pred[4]), inputDict['inches'][5], int(pred[5]))
 	return render_template("index.html", outStr=outStr, headerStr=headerStr, genderStr=genderStr, ageStr=ageStr, htStr=htStr, ageChart=agePlt, htChart=htPlt, genderChart=genderPlt)

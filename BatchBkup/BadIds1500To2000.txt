@@ -1,0 +1,12 @@
+1980046
+2008837
+2008837
+2008046
+2005974
+1994555
+1990410
+2021185
+2020758
+2020409
+2020406
+'ascii' codec can't encode character u'\xa0' in position 8: ordinal not in range(128)
