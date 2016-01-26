@@ -29,6 +29,7 @@ priceMin=1000
 priceMax=100000
 pandasPath="/Users/jbrosamer/PonyPricer/Batch/ConcatAds.p"
 encoderPickle="/Users/jbrosamer/PonyPricer/Batch/Encoders.p"
+modelFile="/Users/jbrosamer/PonyPricer/app/model.p"
 #pandasPath="/Users/jbrosamer/PonyPricer/BatchBkup/DressageAllAds.p"
     
 def all_data(path=pandasPath):
@@ -101,7 +102,7 @@ class Model():
         self.y_test = y_test
         self.gbr=None
 
-    def makeModel(self):
+    def makeModel(self, dump=True):
         """
             fit GBR model with all data
         """
@@ -109,7 +110,10 @@ class Model():
         self.X=self.df.as_matrix(self.df.columns[:-1])
         self.Y=self.df.as_matrix(['lnprice'])[:,0]
 
+
         gbr.fit(self.X, self.Y)
+        if dump:
+            pickle.dump(gbr, open(modelFile, 'wb'))
         self.gbr=gbr
         return gbr
 
