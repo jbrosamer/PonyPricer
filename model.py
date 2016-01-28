@@ -15,21 +15,25 @@ from sklearn.ensemble.partial_dependence import partial_dependence
 from sklearn.linear_model import LinearRegression
 from sklearn.linear_model import Ridge
 from sklearn.preprocessing import PolynomialFeatures
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import HashingVectorizer
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import seaborn as sns
 from scipy import  stats
+from categories import keywords
+from categories import skills
 
-skillsCol=['dressage', 'jumper', 'hunter', 'eventing']
+skillsCol=['dressage', 'hunt', 'jump', 'event', 'prospect', 'import']
 final_cols = ['age', 'gender', 'inches', 'color', 'breed']# 'color', 'registered', 'price']
 final_cols+=['lnprice']
+txtCols=['desc', 'lnprice']
 lblColumns=['breed', 'color', 'gender', 'breedGroup']
 # Path of data
 priceMin=1000
 priceMax=100000
-pandasPath="/Users/jbrosamer/PonyPricer/Batch/ConcatAds.p"
-encoderPickle="/Users/jbrosamer/PonyPricer/Batch/Encoders.p"
-modelFile="/Users/jbrosamer/PonyPricer/app/model.p"
+pandasPath="/Users/jbrosamer/PonyPricer/BatchArea/ConcatAds.p"
+#pandasPath="/Users/jbrosamer/PonyPricer/Batch/GreatLakesConcatAds.p"
 #pandasPath="/Users/jbrosamer/PonyPricer/BatchBkup/DressageAllAds.p"
     
 def all_data(path=pandasPath):
@@ -38,12 +42,14 @@ def all_data(path=pandasPath):
     
     Returns: a dataframe of all 
     """
-    df=pickle.load(open(pandasPath, 'rb'))    
+    df=pickle.load(open(path, 'rb'))    
     return df
 def cleanGender(row):
     if "Mare" in row['gender'] or "Filly" in row['gender']:
         return 1
     return 0
+
+
 
 
 def clean_col(df):
@@ -52,6 +58,7 @@ def clean_col(df):
     df=df[(df['age']>0) & (df['price']>=priceMin) &  (df['price']<=priceMax) & (df['inches']>50) & (df['gender'] != '') & (df['breed'] != "Unknown")]
     df = df.reset_index().drop('index', axis = 1)
     return df
+
 
 
 
@@ -71,9 +78,46 @@ def encode(df):
         encoders[col]=le
         df[col] = le.transform(df[col])
     # Order columns with price as the last column
+    print "Final cols",final_cols
     df = df[final_cols]
-    pickle.dump(encoders, open(encoderPickle, 'wb'))
+    df = df.reset_index().drop('index', axis = 1)
     return df
+
+class TxtFeatures():
+    def __init__(self, df=None):
+        if df is None:
+            df=all_data()
+        self.df=clean_col(df)
+        self.df=self.df[txtCols]
+        self.df = self.df.reset_index().drop('index', axis = 1)
+        self.test_size = 0.1
+    def split(self):
+        np.random.seed(1)
+        self.df = self.df.reindex(np.random.permutation(self.df.index))
+        self.df = self.df.reset_index().drop('index', axis = 1)
+        X = self.df.as_matrix(self.df.columns[:-1])
+        y = self.df.as_matrix(['lnprice'])[:,0]
+        X_train, X_test, y_train, y_test = train_test_split(
+                                                X, y,
+                                                test_size=self.test_size,
+                                                )
+        self.X_train = X_train
+        self.X_test = X_test
+        self.y_train = y_train
+        self.y_test = y_test
+        self.gbr=None
+        
+    def fit(self):
+        self.split()
+        vectorizer=TfidfVectorizer(stop_words='english')
+        vX_train = vectorizer.fit_transform(self.X_train)
+        print("n_samples: %d, n_features: %d" % vX_train.shape)
+        vX_test = vectorizer.transform(self.X_test)
+        print("n_samples: %d, n_features: %d" % vX_test.shape)
+        feature_names = vectorizer.get_feature_names()
+        
+
+
 
 
 class Model():
@@ -112,8 +156,6 @@ class Model():
 
 
         gbr.fit(self.X, self.Y)
-        if dump:
-            pickle.dump(gbr, open(modelFile, 'wb'))
         self.gbr=gbr
         return gbr
 
@@ -137,6 +179,7 @@ class Model():
         for train, test in cv:
             gbr.fit(self.X_train[train], self.y_train[train])
             pred = gbr.predict(self.X_train[test])
+            print "Score", gbr.score(self.X_train[test], self.y_train[test])
             predExp=np.exp(pred)
             testExp=np.exp(self.y_train[test])
             medError=median_absolute_error(predExp, testExp)
@@ -258,7 +301,7 @@ class Model():
         ax.legend(loc=2, fontsize = 16)
         ax.tick_params(labelsize =20)
 
-    def plotFeatures(self):
+    def plotFeatures(self, nFeat=8):
         importances = self.gbr.feature_importances_
         # std = np.std([tree.feature_importances_ for tree in gbr.estimators_],
         #              axis=0)
@@ -267,9 +310,12 @@ class Model():
         self.indices=indices
 
         print("Feature ranking:")
+        outfile=open("Features.txt", 'wb')
 
         for f in range(self.X.shape[1]):
-            print("%d. feature %d (%f)" % (f + 1, indices[f], importances[indices[f]]))
+            outfile.write("%s,%f\n"%(final_cols[indices[f]], importances[indices[f]]))
+            print("%s %d. feature %d (%f)" % (final_cols[indices[f]], f + 1, indices[f], importances[indices[f]]))
+        outfile.close()
         # Plot the feature importances of the forest
         plt.figure()
         plt.title("Feature importances")
@@ -358,7 +404,7 @@ def predCVDataframe():
 
 
 
-def runPrediction(inDict={'breed':["Thoroughbred"],'age':[10],'inches':[66.],'gender':["Gelding"],'color':["Bay"], 'lnPrice':[1.0]}):
+def runPrediction(inDict={'breed':["Thoroughbred"],'age':[10],'inches':[66.],'gender':["Gelding"],'color':["Bay"], 'lnPrice':[1.0]}, conInt=None):
     df_test = all_data(pandasPath)
     df = df_test.copy()
     df = clean_col(df)

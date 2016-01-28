@@ -58,15 +58,14 @@ def output():
 	heightData=list(pred[heightStart:heightStart+len(heightRange)])
 
 
-	perDiff=int(100.*pred[0]/askingPrice)
 	#outStr="The estimated price for a %s year old %s %s inch tall %s is $%s."%(inputDict['age'][0], "s", 0, "s" ,0)
 	headerStr="Estimated price: $%i"%(int(pred[0]))
-	if perDiff > 100:#prediction is more than asking
-		outStr="$%i is probably a good deal for a %s year old %s inch tall %s %s."%(askingPrice, int(inputDict['age'][0]),inputDict['inches'][0], inputDict['breed'][0],  inputDict['gender'][0])
+	if pred[0] > askingPrice:#prediction is more than asking
+		outStr="$%i is probably not a good deal for a %s year old %s inch tall %s %s."%(askingPrice, int(inputDict['age'][0]),inputDict['inches'][0], inputDict['breed'][0],  inputDict['gender'][0])
 
 
 	else:
-		outStr="$%i is probably not a good deal for a %s year old %s inch tall %s %s."%(askingPrice, int(inputDict['age'][0]),inputDict['inches'][0], inputDict['breed'][0],  inputDict['gender'][0])
+		outStr="$%i is probably a good deal for a %s year old %s inch tall %s %s."%(askingPrice, int(inputDict['age'][0]),inputDict['inches'][0], inputDict['breed'][0],  inputDict['gender'][0])
 
 	ageStr=genderStr=htStr=""
 	params={"outStr": outStr, "headerStr": headerStr, "ageRange":ageRange, "ageData": ageData, "genderData":genderData, "heightRange":heightRange, "heightData":heightData}

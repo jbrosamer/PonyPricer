@@ -1,8 +1,0 @@
-2020716
-2020922
-2021066
-2022005
-2022068
-2022106
-2022239
-'ascii' codec can't encode character u'\xa0' in position 19: ordinal not in range(128)

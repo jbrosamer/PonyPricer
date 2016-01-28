@@ -13,7 +13,7 @@ br.set_handle_robots(False)
 br.set_handle_robots(False)
 br.set_handle_equiv(False)
 br.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
-columns=['id','breed', 'breedStr', 'price', 'color','location', 'age', 'zip', 'height', 'temp', 'warmblood', 'sold', 'soldhere']
+columns=['id','breed', 'breedStr', 'price', 'color','location', 'age', 'zip', 'height', 'temp', 'warmblood', 'sold', 'soldhere', 'gender']
 columns+=['forsale', 'forlease', 'registered', 'skills', 'desc']
 cellColMap={32: 'for lease', 34: 'for sale', 2: 'zip', 36: 'price', 38: 'skills', 6: 'age', 8: 'gender', 10: 'height', 14: 'color', 20: 'warmblood', 22: 'temp', 4: 'breed', 26: 'registered', 40: 'desc'}
 # mech = Browser()
@@ -93,9 +93,9 @@ def scrapeSearch(key, batchSize=1000, batchStart=0):
 				print '-'*60
 				badIds.write("%i\n"%i)
 		try:
-			print "Writing ",dataDir+"%sId%iTo%i.p"%(key,batchStart, batchSize+batchStart)
-			pickle.dump(df, open(dataDir+"%sId%iTo%i.p"%(key,batchStart, batchSize+batchStart), "wb"))
-			df.to_csv(dataDir+"%sId%iTo%i.csv"%(key,batchStart, batchSize+batchStart))
+			print "Writing ",dataDir+"%sId%iTo%i.p"%(key,x, batchSize+x)
+			pickle.dump(df, open(dataDir+"%sId%iTo%i.p"%(key,batchStart, x, batchSize+x), "wb"))
+			df.to_csv(dataDir+"%sId%iTo%i.csv"%(key,x, batchSize+x))
 		except Exception as e:
 			badIds.write(str(e)+"\n")
 		badIds.close()
@@ -138,7 +138,7 @@ def scrapeAd(id):
 	adDict['id']=id
 	cells=tables[3].findAll("td")
 	soldCell=soup.findAll("td", class_="navy", limit=2)[-1]
-	if "SOLD" in soldCell.text:
+	if "SALE PEND" in soldCell.text or "SOLD" in soldCell.text:
 		adDict['sold']=True
 		if "SOLD HERE" in soldCell.text:
 			adDict['soldhere']=False
@@ -154,7 +154,7 @@ def scrapeAd(id):
 		if colName=='zip':
 			adDict['location']=cellTxt.split("\n")[1]
 			try:
-				zipStr=int(cellTxt.split("\n")[1].split(" ")[-1])
+				zipStr=str(cellTxt.split("\n")[1].split(" ")[-1])
 				adDict['zip']=zipStr
 			except Exception as e:
 				print "Zip exception ",str(e)
@@ -226,4 +226,4 @@ def scrapeAd(id):
 if __name__ == "__main__":
 	#IdsFromKey("Warmblood", excludeScraped=False)
 	for k in urlDict.keys():
-		scrapeSearch(k)
+	 	scrapeSearch(k)

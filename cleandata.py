@@ -83,7 +83,8 @@ def skillToStr(row):
             return ""
         return ",".join(row['skills'])[:50]
     except:
-        return ""
+        return str(repr(row['skills'])).replace("'", "").replace("[", "").replace("]","")
+
 def cleanBreed(row):
     if row['breed'] in cat.breeds:
         return row['breed']
@@ -97,13 +98,22 @@ def breedGroup(row):
     except:
         return "Other"
 def cleanGender(row):
-    if row['gender'] in cat.genders:
-        return str(row['gender'])
-    if row['gender']=="Filly":
-        return "Mare"
-    if row['gender']=="Colt":
-        return "Stallion"
-    return ""
+    try:
+        if row['gender'] in cat.genders:
+            return str(row['gender'])
+        if row['gender']=="Filly":
+            return "Mare"
+        if row['gender']=="Colt":
+            return "Stallion"
+        return ""
+    except Exception as e:
+        return "Gelding"
+def lowerDesc(row):
+    return (repr(row['desc'])).decode('utf-8').lower()
+
+def hasKeyword(row, key):
+    return key in row['desc']
+
 
 def cleanDf(df):
     print "Total rows",len(df), "Line ", lineno()
@@ -118,15 +128,18 @@ def cleanDf(df):
     df['skills']=df.apply(skillToStr, axis=1)
     df['breed']=df.apply(cleanBreed, axis=1)
     df['gender']=df.apply(cleanGender, axis=1)
+    df['desc']=df.apply(lowerDesc, axis=1)
     df['lnprice']=df.apply(lambda x: math.log(x['price']), axis=1)
     print "Total rows",len(df), "Line ", lineno()
     df['breedGroup']=df.apply(breedGroup, axis=1)
-    df['dressage']=np.where("Dressage" in df['skills'], 1, 0)
-    df['hunter']=np.where("Hunter" in df['skills'], 1, 0)
-    df['jumper']=np.where("Jumper" in df['skills'], 1, 0)
-    df['eventing']=np.where("Eventing" in df['skills'], 1, 0)
+    for k in cat.keywords:
+        print "Keyword",k
+        df[k]=df.apply(lambda x: int(k in (x['desc'])), axis=1)
+    for k in cat.skills:
+        df[k]=df.apply(lambda x: int(k in (x['skills'])), axis=1)
     print "Total rows",len(df), "Line ", lineno()
-    badCols=['breedStr', 'desc', 'location', 'height']
+    df['lenDesc']=df.apply(lambda x: len(x['desc']), axis=1)
+    badCols=['breedStr', 'location', 'height']
     df=df.drop(badCols, axis=1)
     df = df.reset_index().drop('index', axis = 1)
     #print "df cols",df.columns()
@@ -147,8 +160,9 @@ def main():
     connect = dbConnect(host = 'localhost', user = 'root',
             passwd = 'jbrosamer', db = 'horses')
     keyword="All"
+    #keyword="GreatLakes"
     with connect:
-            path="/Users/jbrosamer/PonyPricer/Batch/%s*Ads.p"%keyword
+            path="/Users/jbrosamer/PonyPricer/BatchArea/%s*Ads.p"%keyword
             tablename = "%sAds"%keyword
 
             # Run Scraper
@@ -159,34 +173,26 @@ def main():
 
 
             # Make sure dtypes fit for MySQL db
-            dtype = {}
-            for i in range(len(df.columns)):
-                if df.columns[i] in ['warmblood', 'sold', 'soldhere', 'forlease',
-                                     'forlease']:
-                    dtype[df.columns[i]] = 'BOOLEAN'
-                elif df.columns[i] in ['id', 'temp']:
-                    dtype[df.columns[i]] = 'INTEGER'
-                elif df.columns[i] in ['price', 'height', 'age', 'lnprice']:
-                    dtype[df.columns[i]] = 'REAL'
-                elif df.columns[i] in ['breedStr', 'desc', 'location', 'height', 'skills']:
-                    dtype[df.columns[i]] = 'TEXT'
-                else:
-                    dtype[df.columns[i]] = 'VARCHAR(50)'
-            print dtype
-            df.to_sql(name = tablename, con = connect.con,
-                      flavor = 'mysql', if_exists='replace')
+            # dtype = {}
+            # for i in range(len(df.columns)):
+            #     if df.columns[i] in ['warmblood', 'sold', 'soldhere', 'forlease',
+            #                          'forlease']:
+            #         dtype[df.columns[i]] = 'BOOLEAN'
+            #     elif df.columns[i] in ['id', 'temp']:
+            #         dtype[df.columns[i]] = 'INTEGER'
+            #     elif df.columns[i] in ['price', 'height', 'age', 'lnprice']:
+            #         dtype[df.columns[i]] = 'REAL'
+            #     elif df.columns[i] in ['breedStr', 'desc', 'location', 'height', 'skills']:
+            #         dtype[df.columns[i]] = 'TEXT'
+            #     else:
+            #         dtype[df.columns[i]] = 'VARCHAR(50)'
+            # print dtype
+            # df.to_sql(name = tablename, con = connect.con,
+            #           flavor = 'mysql', if_exists='replace')
             print "N rows",len(df)
-            pickle.dump(df, open("/Users/jbrosamer/PonyPricer/Batch/ConcatAds.p", 'wb'))
+            pickle.dump(df, open("/Users/jbrosamer/PonyPricer/BatchArea/ConcatAds.p", 'wb'))
             df.to_csv("/Users/jbrosamer/PonyPricer/Batch/ConcatAds.csv")
 
-            # Send to MySQL database, if table exists, continue to next
-            try:
-                df.to_sql(name = tablename, con = connect.con,
-                      flavor = 'mysql', dtype = dtype, if_exists='replace')
-                print tablename
-                print
-            except Exception as e:
-                print "Exception ",e
 
 
 if __name__ == "__main__":
