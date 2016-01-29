@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../static/img/horsemoney.ico">
 
-    <title>Pony Pricr</title>
+    <title>Pony Pricer</title>
 
     <!-- Bootstrap core CSS -->
     <link href="../static/css/bootstrap.min.css" rel="stylesheet">
@@ -19,8 +19,10 @@
 
     <!-- Custom styles for this template -->
     <link href="jumbotron.css" rel="stylesheet">
+    <link href="carousel.css" rel="stylesheet">
 
      <script type="text/javascript" src="http://kozea.github.com/pygal.js/javascripts/pygal-tooltips.js"></script>
+     
    
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -38,25 +40,29 @@
       -moz-background-size: cover;
       -o-background-size: cover;
       background-size: cover;
+      fontFamily: "'Unica One', sans-serif";
     }
 
     body {
       padding-top: 20px;
       font-size: 16px;
       background: transparent;
+
     }
 
     h1 {
       font-weight: 400;
       font-size: 40px;
+
     }
+
 
     /* Override B3 .panel adding a subtly transparent background */
     .jumbotron {
-      background-color: rgba(255, 255, 255, 0.2);
+      background-color: rgba(255, 255, 255, 0.9);
     }
     .panel {
-      background-color: rgba(255, 255, 255, 0.8);
+      background-color: rgba(0, 0, 0, 0.9);
     }
 
     .margin-base-vertical {
@@ -78,15 +84,15 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="./input">Pony pricer</a>
+          <a class="navbar-brand" href="./input">Price another pony!</a>
         </div>
 <!--         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li class="active"><a href="http://getbootstrap.com/examples/starter-template/#">Home</a></li>
-            <li><a href="http://getbootstrap.com/examples/starter-template/#about">About</a></li>
+            <li><a href="mailto:jbrosamer@gmail.com"">Mail</a></li>
             <li><a href="http://getbootstrap.com/examples/starter-template/#contact">Contact</a></li>
           </ul>
-        </div><!--/.nav-collapse --> -->
+        </div><!--/.nav-collapse --> 
       </div>
     </nav>
 
@@ -94,26 +100,25 @@
     <div class="jumbotron">
       <div class="container">
         <h1>{{ headerStr }}</h1>
-        <p>{{ outStr }}</p>
+        <h2>{{ outStr }}</h2>
  <!--        <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p> -->
       </div>
     </div>
-
       <!-- Example row of columns -->
       <div class="panel">
-        <div class="col-lg-6">
-          <h2>Gender</h2>
+        <ul class="nav nav-tabs col-lg-6">
+  <li role="button" id="genderBtn"><a href="#">Gender</a></li>
+  <li role="button" id="ageBtn"><a href="#">Age</a></li>
+  <li role="button"id="htBtn"><a href="#">Height</a></li>
+</ul>
+        <div id='genderDiv'>
            <p id="genderPlt" style="min-width: 310px; height: 500px; margin: 0 auto"></p>
         </div>
-        <div class="col-lg-6">
-          <h2>Age</h2>
+        <div id='ageDiv'>
          <p id="agePlt" style="min-width: 310px; height: 500px; margin: 0 auto"></p>
-<!--           <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p> -->
        </div>
-        <div class="col-lg-6">
-          <h2>Height</h2>
+        <div id='htDiv'>
            <p id="htPlt" style="min-width: 310px; height: 500px; margin: 0 auto"></p>
-<!--           <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p> -->
         </div>
       </div>
 
@@ -134,7 +139,10 @@
     <script src="http://code.highcharts.com/highcharts.js"></script>
     <script src="http://code.highcharts.com/highcharts-more.js"></script>
     <script src="http://code.highcharts.com/modules/exporting.js"></script>
+    <script type="text/javascript" src="../static/js/charttheme.js"></script>
     <script type="text/javascript">$(function () {
+
+
     $('#genderPlt').highcharts({
         chart: {
             type: 'column'
@@ -179,7 +187,7 @@
 $(function () {
     $('#agePlt').highcharts({
         chart: {
-            type: 'spline'
+            type: 'area'
         },
         title: {
             text: 'Age versus price'
@@ -194,6 +202,20 @@ $(function () {
         yAxis: {
             title: {
                 text: 'Estimated price ($)'
+            }
+        },
+        plotOptions: {
+            area: {
+                marker: {
+                    enabled: false,
+                    symbol: 'circle',
+                    radius: 2,
+                    states: {
+                        hover: {
+                            enabled: true
+                        }
+                    }
+                }
             }
         },
         tooltip: {
@@ -214,19 +236,36 @@ $(function () {
 $(function () {
     $('#htPlt').highcharts({
         chart: {
-            type: 'spline'
+            type: 'area'
         },
         title: {
             text: 'Height versus price'
         },
         xAxis: {
+          gridLineWidth: 0,
           title: { text: "Height (inches)"},
             categories: {{heightRange|tojson|safe}}
         },
         legend: {
         enabled: false
       },
+      plotOptions: {
+            area: {
+                marker: {
+                    enabled: false,
+                    symbol: 'circle',
+                    radius: 2,
+                    states: {
+                        hover: {
+                            enabled: true
+                        }
+                    }
+                }
+            }
+        },
         yAxis: {
+          gridLineWidth: 0,
+
             title: {
                 text: 'Estimated price ($)'
             }
@@ -245,6 +284,30 @@ $(function () {
         }]
     });
 });
+
+$("#genderBtn").click(function() { 
+    // assumes element with id='button'
+     $("#genderDiv").show();
+     $("#ageDiv").hide();
+     $("#htDiv").hide();
+
+});
+$("#ageBtn").click(function() { 
+    // assumes element with id='button'
+     $("#ageDiv").show();
+     $("#genderDiv").hide();
+     $("#htDiv").hide();
+
+});
+$("#htBtn").click(function() { 
+    // assumes element with id='button'
+     $("#genderDiv").hide();
+     $("#ageDiv").hide();
+     $("#htDiv").show();
+
+});
+
+
     </script>
   </body>
 </html>

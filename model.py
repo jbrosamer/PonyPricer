@@ -25,16 +25,17 @@ from categories import keywords
 from categories import skills
 
 skillsCol=['dressage', 'hunt', 'jump', 'event', 'prospect', 'import']
-final_cols = ['age', 'gender', 'inches', 'color', 'breed']# 'color', 'registered', 'price']
+final_cols = ['age', 'gender', 'inches', 'color', 'breed']#+keywords+skills# 'color', 'registered', 'price']
 final_cols+=['lnprice']
 txtCols=['desc', 'lnprice']
 lblColumns=['breed', 'color', 'gender', 'breedGroup']
 # Path of data
 priceMin=1000
+
 priceMax=100000
-pandasPath="/Users/jbrosamer/PonyPricer/BatchArea/ConcatAds.p"
+#pandasPath="/Users/jbrosamer/PonyPricer/BatchArea/ConcatAds.p"
 #pandasPath="/Users/jbrosamer/PonyPricer/Batch/GreatLakesConcatAds.p"
-#pandasPath="/Users/jbrosamer/PonyPricer/BatchBkup/DressageAllAds.p"
+pandasPath="/Users/jbrosamer/PonyPricer/BatchBkup/DressageAllAds.p"
     
 def all_data(path=pandasPath):
     """
@@ -276,7 +277,7 @@ class Model():
         Plots results from CV
         """
         if log:
-            pMax=np.log(priceMax)
+            pMax=np.log(priceMax*100)
             pMin=np.log(priceMin)
         else:
             pMax=priceMax
@@ -293,8 +294,8 @@ class Model():
         m,b=np.polyfit(self.results['real'], self.results['pred'], 1)
         print "Line fit m:%f b:%f"%(m,b)
 
-        ax.set_xlabel('Log(Actual Price ($))',fontsize = 20)
-        ax.set_ylabel('Log(Predicted Price ($))', fontsize = 20)
+        ax.set_xlabel('Log(Actual Price) ($)',fontsize = 20)
+        ax.set_ylabel('Log(Predicted Price) ($)', fontsize = 20)
         ax.set_title('Results from KFold Cross-Validation', fontsize = 25)
         ax.set_xlim(pMin,pMax)
         ax.set_ylim(pMin,pMax)

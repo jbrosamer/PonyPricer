@@ -225,5 +225,5 @@ def scrapeAd(id):
 
 if __name__ == "__main__":
 	#IdsFromKey("Warmblood", excludeScraped=False)
-	for k in urlDict.keys():
+	for k in urlDict.keys()[-3:]:
 	 	scrapeSearch(k)
