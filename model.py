@@ -91,7 +91,7 @@ def encode(df, dump=fromPickle):
             continue
         le = LabelEncoder()
         if dump:
-            fName="%s%s.npy"%(modelPath,col)
+            fName="%s/%s.npy"%(modelPath,col)
             if os.path.isfile(fName):
                 le.classes_=np.load(fName)
             else:
