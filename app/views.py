@@ -52,7 +52,6 @@ def output():
 	# print "inputDict",inputDict
 
 	pred=np.power(10, m.predForWeb(inputDict))
-	print "pred",pred
 
 	ageData=list(pred[ageStart:ageStart+len(ageRange)])
 	ageRange=list(ageRange)
