@@ -453,12 +453,9 @@ def runPrediction(inDict={'breed':["Thoroughbred"],'age':[10],'inches':[66.],'ge
 def predForWeb(inDict={'breed':["Thoroughbred"],'age':[10],'inches':[66.],'gender':["Gelding"],'color':["Bay"], 'logprice':[1.0]}, conInt=None):
     gbr=cPickle.load(open("%s/Model.pkl"%modelPath, 'rb'))
     testDf=pd.DataFrame.from_dict(inDict)
-    print "testDf",testDf.head()
-    #testDf=clean_col(testDf)
     testDf=encode(testDf, True)
     x_test=testDf.as_matrix(testDf.columns[:-1])
     pred=gbr.predict(x_test)
-    print "pred",pred
     return pred
 
 def saveModels():
