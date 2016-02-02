@@ -71,28 +71,41 @@
 		<div class="form-group">
 		<form  action="/output" method="GET" class="margin-base-vertical">
         <div>
-          <label for="age">Age:</label>
-          <input type="text" id="age" name='age' placeholder="e.g." value="10">
+          <label for="age">Age (years):</label>
+          <input type="number" id="age" name='age' placeholder="e.g." value="10" min="0" max="20">
       </div>
         <div>
           <label for="breed">Breed:</label>
-          <input type="text" id="breed" name='breed' placeholder="e.g." value="Thoroughbred">
+          <select name="breed">
+          {% for o in breeds %}
+                <option name="{{ o }}">{{ o }}</option>
+                 {% endfor %}
+           </select>
       </div>
         <div>
-          <label for="Height">Height:</label>
-          <input type="text" id="inches" name='inches' placeholder="e.g." value="66.">
+          <label for="Height">Height (in.):</label>
+          <input type="number" id="inches" name='inches' placeholder="e.g." value="66">
       </div>
         <div>
           <label for="Gender">Gender:</label>
-          <input type="text" id="gender" name='gender' placeholder="e.g." value="Mare">
+          <select name="gender">
+		  <option selected="selected" value="Mare">Mare</option>
+		  <option value="Gelding">Gelding</option>
+		  <option value="Stallion">Stallion</option>
+		  </select>
         </div>
         <div>
-          <label for="Color">Color:</label>
-          <input type="text" id="color" name='color' placeholder="e.g." value="Bay">
+          <label for="Color:">Color:</label>
+          <select name="color">
+              {% for o in colors %}
+                <option name="{{ o }}">{{ o }}</option>
+                 {% endfor %}
+
+              </select>
         </div>
         <div>
-          <label for="Price">Asking Price:</label>
-          <input type="text" id="price" name='price' placeholder="e.g." value="7000">
+          <label for="Price">Asking Price ($):</label>
+          <input type="number" id="price" name='price' placeholder="e.g." value="7000">
         </div>
 
         <div>

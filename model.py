@@ -1,4 +1,5 @@
-import re, glob, pickle
+import re, glob, pickle, os
+import cPickle
 
 import requests
 import pandas as pd
@@ -24,18 +25,32 @@ from scipy import  stats
 from categories import keywords
 from categories import skills
 
+
 skillsCol=['dressage', 'hunt', 'jump', 'event', 'prospect', 'import']
-final_cols = ['age', 'gender', 'inches', 'color', 'breed']#+keywords+skills# 'color', 'registered', 'price']
-final_cols+=['lnprice']
-txtCols=['desc', 'lnprice']
+baseCols=['age', 'gender', 'inches', 'color', 'breed']
+baseCols+=['logprice']
+allCols=['age', 'gender', 'inches', 'color', 'breed']+keywords+skills
+allCols+=['logprice']
+txtCols=['desc', 'logprice']
 lblColumns=['breed', 'color', 'gender', 'breedGroup']
+final_cols=baseCols
 # Path of data
+
+fromPickle=True
 priceMin=1000
 
 priceMax=100000
-#pandasPath="/Users/jbrosamer/PonyPricer/BatchArea/ConcatAds.p"
+pandasPath="/Users/jbrosamer/PonyPricer/ConcatAds.p"
 #pandasPath="/Users/jbrosamer/PonyPricer/Batch/GreatLakesConcatAds.p"
-pandasPath="/Users/jbrosamer/PonyPricer/BatchBkup/DressageAllAds.p"
+#pandasPath="/Users/jbrosamer/PonyPricer/BatchBkup/DressageAllAds.p"
+if final_cols==allCols:
+    modelPath="%s/ModelAllCols/"%os.path.dirname(os.path.abspath(__file__))
+else:
+    modelPath="%s/ModelBaseCols"%os.path.dirname(os.path.abspath(__file__))
+
+
+def pow10(npArray):
+    return np.array([10**x for x in npArray])
     
 def all_data(path=pandasPath):
     """
@@ -64,7 +79,7 @@ def clean_col(df):
 
 
 
-def encode(df):
+def encode(df, dump=fromPickle):
     """
     Takes in: dataframe from clean_col
     
@@ -75,10 +90,18 @@ def encode(df):
         if col not in final_cols:
             continue
         le = LabelEncoder()
-        le.fit(df[col])
+        if dump:
+            fName="%s%s.npy"%(modelPath,col)
+            if os.path.isfile(fName):
+                le.classes_=np.load(fName)
+            else:
+                le.fit(df[col])
+                np.save(fName, le.classes_)
+        else:
+            le.fit(df[col])
         encoders[col]=le
         df[col] = le.transform(df[col])
-    # Order columns with price as the last column
+    # Order columns with logprice as the last column
     print "Final cols",final_cols
     df = df[final_cols]
     df = df.reset_index().drop('index', axis = 1)
@@ -97,7 +120,7 @@ class TxtFeatures():
         self.df = self.df.reindex(np.random.permutation(self.df.index))
         self.df = self.df.reset_index().drop('index', axis = 1)
         X = self.df.as_matrix(self.df.columns[:-1])
-        y = self.df.as_matrix(['lnprice'])[:,0]
+        y = self.df.as_matrix(['logprice'])[:,0]
         X_train, X_test, y_train, y_test = train_test_split(
                                                 X, y,
                                                 test_size=self.test_size,
@@ -130,13 +153,15 @@ class Model():
         self.df = df
         self.params = params
         self.test_size = 0.1
+        self.X_train = self.X_test = self.df.as_matrix(self.df.columns[:-1])
+        self.y_train = self.y_test  = self.df.as_matrix(['logprice'])[:,0]
         
     def split(self):
         np.random.seed(1)
         self.df = self.df.reindex(np.random.permutation(self.df.index))
         self.df = self.df.reset_index().drop('index', axis = 1)
         X = self.df.as_matrix(self.df.columns[:-1])
-        y = self.df.as_matrix(['lnprice'])[:,0]
+        y = self.df.as_matrix(['logprice'])[:,0]
         X_train, X_test, y_train, y_test = train_test_split(
                                                 X, y,
                                                 test_size=self.test_size,
@@ -147,18 +172,19 @@ class Model():
         self.y_test = y_test
         self.gbr=None
 
-    def makeModel(self, dump=True):
+    def makeModel(self, dump=fromPickle):
         """
             fit GBR model with all data
         """
         gbr = GradientBoostingRegressor(**self.params)
         self.X=self.df.as_matrix(self.df.columns[:-1])
-        self.Y=self.df.as_matrix(['lnprice'])[:,0]
+        self.Y=self.df.as_matrix(['logprice'])[:,0]
 
 
         gbr.fit(self.X, self.Y)
         self.gbr=gbr
         return gbr
+
 
         
     def kfold_cv(self, n_folds = 3):
@@ -181,11 +207,11 @@ class Model():
             gbr.fit(self.X_train[train], self.y_train[train])
             pred = gbr.predict(self.X_train[test])
             print "Score", gbr.score(self.X_train[test], self.y_train[test])
-            predExp=np.exp(pred)
-            testExp=np.exp(self.y_train[test])
+            predExp=np.power(pred, 10)
+            testExp=np.power(self.y_train[test], 10)
             medError=median_absolute_error(predExp, testExp)
             percentError=np.median([np.fabs(p-t)/t for p,t in zip(predExp, testExp)])
-            error = mean_squared_error(np.exp(pred), np.exp(self.y_train[test]))**0.5
+            error = mean_squared_error(np.power(pred, 10), np.power(self.y_train[test], 10))**0.5
             self.results['pred'] += list(pred)
             self.results['real'] += list(self.y_train[test])
             self.rmse_cv += [error]
@@ -211,17 +237,13 @@ class Model():
         self.pct_error=[]
         self.results = {'pred': [],
                    'real': []}
-        dfFeatures=[]
-        
         for train, test in cv:
             gbr.fit(self.X_train[train], self.y_train[train])
             dfFeatures+=[unencode(pd.DataFrame(columns=final_cols[:-1], data=self.X_train[test]))]
             pred = gbr.predict(self.X_train[test])
-            predExp=np.exp(pred)
-            testExp=np.exp(self.y_train[test])
             medError=median_absolute_error(predExp, testExp)
             percentError=np.median([np.fabs(p-t)/t for p,t in zip(predExp, testExp)])
-            error = mean_squared_error(np.exp(pred), np.exp(self.y_train[test]))**0.5
+            error = mean_squared_error(np.power(pred, 10), np.power(self.y_train[test], 10))**0.5
             self.inFeatures=(self.X_train[test])
             self.results['pred'] += list(predExp)
             self.results['real'] += list(testExp)
@@ -256,11 +278,11 @@ class Model():
             print "Starting fit"
             gbr.fit(self.X_train[train], self.y_train[train])
             pred = gbr.predict(self.X_train[test])
-            predExp=np.exp(pred)
-            testExp=np.exp(self.y_train[test])
+            predExp=np.power(pred, 10)
+            testExp=np.power(self.y_train[test], 10)
             medError=median_absolute_error(predExp, testExp)
             percentError=np.median([np.fabs(p-t)/t for p,t in zip(predExp, testExp)])
-            error = mean_squared_error(np.exp(pred), np.exp(self.y_train[test]))**0.5
+            error = mean_squared_error(np.power(pred, 10), np.power(self.y_train[test], 10))**0.5
             self.results['pred'] += list(pred)
             self.results['real'] += list(self.y_train[test])
             self.rmse_cv += [error]
@@ -275,32 +297,44 @@ class Model():
     def plot_results(self, log=True):
         """
         Plots results from CV
+        Slow right now but unsure why!
         """
+        pMax=priceMax*10
+        pMin=priceMin/5
+        print "Starting"
         if log:
-            pMax=np.log(priceMax*100)
-            pMin=np.log(priceMin)
+            if not self.results.has_key('pred10'):
+                self.results['pred10']=pow10(self.results['pred'])
+            y=self.results['pred10']
+            if not self.results.has_key('real10'):
+                self.results['real10']=pow10(self.results['real'])
+            x=self.results['real10']
         else:
-            pMax=priceMax
-            pMin=priceMin
+            
+            x=self.results['real']
+            y=self.results['pred']
         plt.style.use('ggplot')
+        print "going to plot"
         fig, ax = plt.subplots(figsize = (12,10))
-
-        ax.scatter(x=self.results['real'], y=self.results['pred'], color = (0.6,0.0,0.2),
-                   label = 'Model Predictions',
-                   s = 100, alpha = 0.4)
-        ax.plot(np.arange(pMin, pMax),np.arange(pMin, pMax), color = 'black',
-                   label = 'Perfect Prediction Line',
-                   lw = 4, alpha = 0.5, ls = 'dashed')
-        m,b=np.polyfit(self.results['real'], self.results['pred'], 1)
-        print "Line fit m:%f b:%f"%(m,b)
-
-        ax.set_xlabel('Log(Actual Price) ($)',fontsize = 20)
-        ax.set_ylabel('Log(Predicted Price) ($)', fontsize = 20)
-        ax.set_title('Results from KFold Cross-Validation', fontsize = 25)
+        ax.set(xscale="log", yscale="log")
         ax.set_xlim(pMin,pMax)
         ax.set_ylim(pMin,pMax)
-        ax.legend(loc=2, fontsize = 16)
+
+        ax.scatter(x=x, y=y, color = (0.6,0.0,0.2),
+                   label = 'Model Predictions',
+                   s = 100, alpha = 0.05)
+
+        ax.plot(np.arange(pMin, pMax*100),np.arange(pMin, pMax*100), color = 'black',
+                   label = 'Perfect Prediction Line',
+                   lw = 4, alpha = 0.5, ls = 'dashed')
+        ax.set_xlabel('Actual Price [$]', fontsize = 40)
+        ax.set_ylabel('Predicted Price [$]', fontsize = 40)
+       # ax.set_title('Results from KFold Cross-Validation', fontsize = 40)
+        
+        
+        ax.legend(loc=2, fontsize=30)
         ax.tick_params(labelsize =20)
+        return fig, ax
 
     def plotFeatures(self, nFeat=8):
         importances = self.gbr.feature_importances_
@@ -344,33 +378,27 @@ class Model():
 
 
     
-    def validate(self):
+    def validate(self, pickle=True, cv=0):
         """
         Validate Model on Test set
         """
-        gbr = GradientBoostingRegressor(**self.params)
-        gbr.fit(self.X_train, self.y_train)
-        self.preds = gbr.predict(self.X_test)
-        self.rmse = mean_squared_error(self.preds, self.y_test)**0.5
-        print 'RMSE score:', self.rmse
-        
-        plt.style.use('ggplot')
-        fig, ax = plt.subplots(figsize = (12,10))
-
-        ax.scatter(self.y_test, self.preds, color = (0.6,0.0,0.2),
-                   label = 'Model Predictions',
-                   s = 100, alpha = 0.4)
-        ax.plot(np.arange(0, 50000),np.arange(0, 50000), color = 'black',
-                   label = 'Perfect Prediction Line',
-                   lw = 4, alpha = 0.5, ls = 'dashed')
-
-        ax.set_xlabel('Actual Price ($)',fontsize = 20)
-        ax.set_ylabel('Predicted Price ($)', fontsize = 20)
-        ax.set_title('Results from Test Set', fontsize = 25)
-        ax.set_xlim(0,50000)
-        ax.set_ylim(0,50000)
-        ax.legend(loc=2, fontsize = 16)
-        ax.tick_params(labelsize =20)
+        if cv>0:
+            self.split()
+        else:
+            self.X_train=self.X_test = self.df.as_matrix(self.df.columns[:-1])
+            self.y_train=self.y_test = self.df.as_matrix(['logprice'])[:,0]
+        if pickle:
+            gbr=cPickle.load(open("%s/Model.pkl"%modelPath, 'rb'))
+        else:
+            gbr = GradientBoostingRegressor(**self.params)
+            gbr.fit(self.X_train, self.y_train)
+        self.results = {'pred': [],
+                   'real': []}
+        self.results['pred'] = gbr.predict(self.X_test)
+        self.results['real'] = self.y_train
+        self.results['pred10']=pow10(self.results['pred'])
+        self.results['real10']=pow10(self.results['real'])
+        print "Score ",r2_score(self.y_train, self.results['pred'])
 def predDataframe():
     df = all_data(pandasPath)
     df = clean_col(df)
@@ -380,8 +408,8 @@ def predDataframe():
     model=Model(df)
     gbr=model.makeModel()
     pred=gbr.predict(model.X)
-    lblDf['real']=np.exp(df['lnprice'])
-    lblDf['pred']=np.exp(pred)
+    lblDf['real']=np.power(df['logprice'])
+    lblDf['pred']=np.power(pred, 10)
     lblDf['diff']=pd.Series(np.fabs(lblDf['pred']-lblDf['real']))
     lblDf['perDiff']=pd.Series(np.fabs(lblDf['pred']-lblDf['real'])/lblDf['real'])
 
@@ -396,8 +424,8 @@ def predCVDataframe():
     model=Model(df)
     gbr=model.makeModel()
     pred=gbr.predict(model.X)
-    lblDf['real']=np.exp(df['lnprice'])
-    lblDf['pred']=np.exp(pred)
+    lblDf['real']=np.power(df['logprice'], 10)
+    lblDf['pred']=np.power(pred, 10)
     lblDf['diff']=pd.Series(np.fabs(lblDf['pred']-lblDf['real']))
     lblDf['perDiff']=pd.Series(np.fabs(lblDf['pred']-lblDf['real'])/lblDf['real'])
 
@@ -405,7 +433,7 @@ def predCVDataframe():
 
 
 
-def runPrediction(inDict={'breed':["Thoroughbred"],'age':[10],'inches':[66.],'gender':["Gelding"],'color':["Bay"], 'lnPrice':[1.0]}, conInt=None):
+def runPrediction(inDict={'breed':["Thoroughbred"],'age':[10],'inches':[66.],'gender':["Gelding"],'color':["Bay"], 'logprice':[1.0]}, conInt=None):
     df_test = all_data(pandasPath)
     df = df_test.copy()
     df = clean_col(df)
@@ -417,7 +445,32 @@ def runPrediction(inDict={'breed':["Thoroughbred"],'age':[10],'inches':[66.],'ge
     trainDf=total[:lenTrain]
     testDf=total[lenTrain:]
     model=Model(trainDf)
-    gbr=model.makeModel()
+    gbr=model.makeModel(dump=fromPickle)
     x_test=testDf.as_matrix(testDf.columns[:-1])
     pred=gbr.predict(x_test)
     return pred
+
+def predForWeb(inDict={'breed':["Thoroughbred"],'age':[10],'inches':[66.],'gender':["Gelding"],'color':["Bay"], 'logprice':[1.0]}, conInt=None):
+    gbr=cPickle.load(open("%s/Model.pkl"%modelPath, 'rb'))
+    testDf=pd.DataFrame.from_dict(inDict)
+    print "testDf",testDf.head()
+    #testDf=clean_col(testDf)
+    testDf=encode(testDf, True)
+    x_test=testDf.as_matrix(testDf.columns[:-1])
+    pred=gbr.predict(x_test)
+    print "pred",pred
+    return pred
+
+def saveModels():
+    df= all_data(pandasPath)
+    df = clean_col(df)
+    df=encode(df, dump=True)
+    model=Model(df)
+    gbr=model.makeModel()
+    print "Dumping","%sModel.pkl"%modelPath
+    cPickle.dump(gbr, open("%s/Model.pkl"%modelPath, 'wb'))
+    return gbr
+
+
+
+

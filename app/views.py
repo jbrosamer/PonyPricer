@@ -4,19 +4,21 @@ from flask import request
 import model as m
 import numpy as np
 import seaborn as sns
-import pygal, sys
+import sys
+import math
+import categories as cat
 
-style=pygal.style.CleanStyle
+# style=pygal.style.CleanStyle
 
 
-@app.route('/index')
-def index():
-   return "Hello, World!"
+# @app.route('/index')
+# def index():
+#    return "Hello, World!"
 
 @app.route('/')
 @app.route('/input')
 def input():
-    return render_template("input.html")
+    return render_template("input.html", colors=cat.colors, breeds=cat.breeds)
 
 @app.route('/output')
 def output():
@@ -25,15 +27,16 @@ def output():
 	askingPrice=float(request.args['price'])
 
 	#need to format into dict with list for values. Have gender switch for first test, and age +/ 50% for next two elements
-	ageRange=np.linspace(1, 15, 15)
+	ageRange=range(1, 20, 2)
 	genderRange=["Gelding", "Mare", "Stallion"]
-	heightRange=np.linspace(float(request.args['inches'])-8.0, float(request.args['inches'])+8.0, 9)
+	intHeight=int(math.floor(float(request.args['inches'])))
+	heightRange=range(intHeight-8, intHeight+9, 2)
 	ageStart=1
 	genderStart=ageStart+len(ageRange)
 	heightStart=genderStart+len(genderRange)
 	nVars=heightStart+1+len(heightRange)
 
-	inputDict={'lnPrice':[None]*nVars}
+	inputDict={'logprice':[None]*nVars}
 	for k in request.args.keys():
 		if k=='price':
 			continue
@@ -46,8 +49,10 @@ def output():
 	for n, val in enumerate(heightRange):
 		inputDict['inches'][n+heightStart]=val
 
-	print "inputDict",inputDict
-	pred=np.exp(m.runPrediction(inputDict))
+	# print "inputDict",inputDict
+
+	pred=np.power(10, m.predForWeb(inputDict))
+	print "pred",pred
 
 	ageData=list(pred[ageStart:ageStart+len(ageRange)])
 	ageRange=list(ageRange)
@@ -57,19 +62,12 @@ def output():
 	heightRange=list(heightRange)
 	heightData=list(pred[heightStart:heightStart+len(heightRange)])
 
-
-	#outStr="The estimated price for a %s year old %s %s inch tall %s is $%s."%(inputDict['age'][0], "s", 0, "s" ,0)
-	headerStr="Estimated price: $%i"%(int(pred[0]))
+	
+	outStrs="Age: %.1f years \nBreed: %s\nHeight: %.1f in.\nGender: %s\nColor: %s"%(float(inputDict['age'][0]), inputDict['breed'][0], float(inputDict['inches'][0]), inputDict['gender'][0], inputDict['color'][0])
 	if pred[0] > askingPrice:#prediction is more than asking
-		outStr="$%i is probably a good deal for a %s year old %s inch tall %s %s."%(askingPrice, int(inputDict['age'][0]),inputDict['inches'][0], inputDict['breed'][0],  inputDict['gender'][0])
-
-
+		headerStr="Estimated price $%i, $%i more than asking price"%(int(pred[0]), abs(int(pred[0]-askingPrice)))
 	else:
-		outStr="$%i is probably not a good deal for a %s year old %s inch tall %s %s."%(askingPrice, int(inputDict['age'][0]),inputDict['inches'][0], inputDict['breed'][0],  inputDict['gender'][0])
-
+		headerStr="Estimated price $%i, $%i less than asking price"%(int(pred[0]), abs(int(pred[0]-askingPrice)))
 	ageStr=genderStr=htStr=""
-	params={"outStr": outStr, "headerStr": headerStr, "ageRange":ageRange, "ageData": ageData, "genderData":genderData, "heightRange":heightRange, "heightData":heightData}
-	# genderStr="A similar %s would cost $%i."%(inputDict['gender'][1], int(pred[1]))
-	# ageStr="A similar %s year old would cost $%i. A similar %s year old would cost $%i."%(int(inputDict['age'][2]), int(pred[2]), int(inputDict['age'][3]), int(pred[3]))
-	# htStr="A similar %s inch tall horse would cost $%i. A similar %s inch tall horse would cost $%i."%(inputDict['inches'][4], int(pred[4]), inputDict['inches'][5], int(pred[5]))
+	params={"estimate":pred[0], "askingPrice":askingPrice, "outStrs": outStrs.split("\n"), "headerStr": headerStr, "ageRange":ageRange, "ageData": ageData, "genderData":genderData, "heightRange":heightRange, "heightData":heightData}
 	return render_template("index.html", **params)

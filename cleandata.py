@@ -20,7 +20,7 @@ import inspect
 import pandas as pd
 import numpy as np
 import mysql.connector
-import pickle, glob
+import pickle, glob, cPickle
 import math
 
 import categories as cat
@@ -129,7 +129,7 @@ def cleanDf(df):
     df['breed']=df.apply(cleanBreed, axis=1)
     df['gender']=df.apply(cleanGender, axis=1)
     df['desc']=df.apply(lowerDesc, axis=1)
-    df['lnprice']=df.apply(lambda x: math.log(x['price']), axis=1)
+    df['logprice']=df.apply(lambda x: math.log10(x['price']), axis=1)
     print "Total rows",len(df), "Line ", lineno()
     df['breedGroup']=df.apply(breedGroup, axis=1)
     for k in cat.keywords:
@@ -170,27 +170,8 @@ def main():
             print "Total rows",len(df), "Line ", lineno()
             df=cleanDf(df)
             print "Total rows",len(df), "Line ", lineno()
-
-
-            # Make sure dtypes fit for MySQL db
-            # dtype = {}
-            # for i in range(len(df.columns)):
-            #     if df.columns[i] in ['warmblood', 'sold', 'soldhere', 'forlease',
-            #                          'forlease']:
-            #         dtype[df.columns[i]] = 'BOOLEAN'
-            #     elif df.columns[i] in ['id', 'temp']:
-            #         dtype[df.columns[i]] = 'INTEGER'
-            #     elif df.columns[i] in ['price', 'height', 'age', 'lnprice']:
-            #         dtype[df.columns[i]] = 'REAL'
-            #     elif df.columns[i] in ['breedStr', 'desc', 'location', 'height', 'skills']:
-            #         dtype[df.columns[i]] = 'TEXT'
-            #     else:
-            #         dtype[df.columns[i]] = 'VARCHAR(50)'
-            # print dtype
-            # df.to_sql(name = tablename, con = connect.con,
-            #           flavor = 'mysql', if_exists='replace')
             print "N rows",len(df)
-            pickle.dump(df, open("/Users/jbrosamer/PonyPricer/BatchArea/ConcatAds.p", 'wb'))
+            cPickle.dump(df, open("/Users/jbrosamer/PonyPricer/ConcatAds.p", 'wb'))
             df.to_csv("/Users/jbrosamer/PonyPricer/Batch/ConcatAds.csv")
 
 

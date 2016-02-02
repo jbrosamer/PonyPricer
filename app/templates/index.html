@@ -7,7 +7,7 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../static/img/horsemoney.ico">
+    <link rel="icon" href="../static/img/pony.svg">
 
     <title>Pony Pricer</title>
 
@@ -19,7 +19,7 @@
 
     <!-- Custom styles for this template -->
     <link href="jumbotron.css" rel="stylesheet">
-    <link href="carousel.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
      <script type="text/javascript" src="http://kozea.github.com/pygal.js/javascripts/pygal-tooltips.js"></script>
      
@@ -55,6 +55,17 @@
       font-size: 40px;
 
     }
+    .header,
+    .container,
+    .panel,
+.marketing,
+.jumbotron,
+.footer,
+.navbar
+{
+  margin: 25px;
+}
+
 
 
     /* Override B3 .panel adding a subtly transparent background */
@@ -62,7 +73,7 @@
       background-color: rgba(255, 255, 255, 0.9);
     }
     .panel {
-      background-color: rgba(0, 0, 0, 0.9);
+      background-color: rgba(0, 0, 0, 0.85);
     }
 
     .margin-base-vertical {
@@ -99,26 +110,48 @@
     <!-- Main jumbotron for a primary marketing message or call to action -->
     <div class="jumbotron">
       <div class="container">
-        <h1>{{ headerStr }}</h1>
-        <h2>{{ outStr }}</h2>
- <!--        <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p> -->
+        
+        
+        <h1>Estimated price: ${{ estimate | int }}</h1>
+        {% if estimate > askingPrice %}
+        
+          <p style="font-size:x-large"><i class="fa fa-thumbs-o-up"></i>
+               Probably a good deal!
+            </p>
+            <h5>
+          ${{ (estimate-askingPrice)  | int }} predicted savings with a ${{ askingPrice | int }} asking price
+        </h5>
+      {% else %}
+      <p style="font-size:x-large"><i class="fa fa-thumbs-o-down"></i>
+               Probably a bad deal!
+            </p>
+          <h3>
+          ${{ (askingPrice-estimate)  | int }} predicted loss with a ${{ askingPrice | int }} asking price
+        </h3>
+          
+      {% endif %}
+      {% for o in outStrs %}
+            <p style="font-size:medium">{{ o }}</p>
+        {% endfor %}
       </div>
     </div>
       <!-- Example row of columns -->
       <div class="panel">
-        <ul class="nav nav-tabs col-lg-6">
+        <ul class="nav nav-tabs">
+            <li role="button" id="ageBtn"><a href="#">Age</a></li>
   <li role="button" id="genderBtn"><a href="#">Gender</a></li>
-  <li role="button" id="ageBtn"><a href="#">Age</a></li>
+
   <li role="button"id="htBtn"><a href="#">Height</a></li>
 </ul>
-        <div id='genderDiv'>
-           <p id="genderPlt" style="min-width: 310px; height: 500px; margin: 0 auto"></p>
-        </div>
+
         <div id='ageDiv'>
-         <p id="agePlt" style="min-width: 310px; height: 500px; margin: 0 auto"></p>
+         <p id="agePlt" style="min-width: 95%; height: 500px; margin: 0"></p>
        </div>
+               <div id='genderDiv'>
+           <div id="genderPlt" style="min-width: 95%; height: 500px; margin:0 "></div>
+        </div>
         <div id='htDiv'>
-           <p id="htPlt" style="min-width: 310px; height: 500px; margin: 0 auto"></p>
+           <p id="htPlt" style="min-width: 95%; height: 500px; margin:0"></p>
         </div>
       </div>
 
@@ -148,7 +181,7 @@
             type: 'column'
         },
         title: {
-            text: 'Gender versus price'
+            text: 'Predicted price for this horse with different gender'
         },
         xAxis: {
             categories: ["Gelding", "Mare", "Stallion"],
@@ -166,7 +199,7 @@
         tooltip: {
             headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
             pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                '<td style="padding:0"><b>$ {point.y:.1f}</b></td></tr>',
+                '<td style="padding:0"><b>$ {point.y:.0f}</b></td></tr>',
             footerFormat: '</table>',
             shared: true,
             useHTML: true
@@ -174,7 +207,16 @@
         plotOptions: {
             column: {
                 pointPadding: 0.2,
-                borderWidth: 0
+                borderWidth: 0,
+                marker: {
+                          enabled: false,
+                        symbol: 'url(../static/img/horse123.png)',
+                    states: {
+                        hover: {
+                            enabled: true
+                        }
+                    }
+                }
             }
         },
         series: [{
@@ -190,7 +232,7 @@ $(function () {
             type: 'area'
         },
         title: {
-            text: 'Age versus price'
+            text: 'Predicted price over life of this horse'
         },
         legend: {
         enabled: false
@@ -207,9 +249,8 @@ $(function () {
         plotOptions: {
             area: {
                 marker: {
-                    enabled: false,
-                    symbol: 'circle',
-                    radius: 2,
+                          enabled: false,
+                        symbol: 'url(../static/img/horse123.png)',
                     states: {
                         hover: {
                             enabled: true
@@ -221,7 +262,7 @@ $(function () {
         tooltip: {
             headerFormat: '<span style="font-size:10px">{point.key} years</span><table>',
             pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                '<td style="padding:0"><b>$ {point.y:.1f}</b></td></tr>',
+                '<td style="padding:0"><b>$ {point.y:.0f}</b></td></tr>',
             footerFormat: '</table>',
             shared: true,
             useHTML: true
@@ -239,7 +280,7 @@ $(function () {
             type: 'area'
         },
         title: {
-            text: 'Height versus price'
+            text: 'Predicted price for this horse with different height'
         },
         xAxis: {
           gridLineWidth: 0,
@@ -253,8 +294,8 @@ $(function () {
             area: {
                 marker: {
                     enabled: false,
-                    symbol: 'circle',
-                    radius: 2,
+                    symbol: 'url(../static/img/horse123.png)',
+                    // radius: 0.05,
                     states: {
                         hover: {
                             enabled: true
@@ -273,7 +314,7 @@ $(function () {
         tooltip: {
             headerFormat: '<span style="font-size:10px">{point.key} in</span><table>',
             pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                '<td style="padding:0"><b>$ {point.y:.1f}</b></td></tr>',
+                '<td style="padding:0"><b>$ {point.y:.0f}</b></td></tr>',
             footerFormat: '</table>',
             shared: true,
             useHTML: true
@@ -306,6 +347,9 @@ $("#htBtn").click(function() {
      $("#htDiv").show();
 
 });
+  $("#ageBtn").click();
+
+
 
 
     </script>
