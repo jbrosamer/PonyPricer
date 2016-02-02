@@ -102,7 +102,6 @@ def encode(df, dump=fromPickle):
         encoders[col]=le
         df[col] = le.transform(df[col])
     # Order columns with logprice as the last column
-    print "Final cols",final_cols
     df = df[final_cols]
     df = df.reset_index().drop('index', axis = 1)
     return df

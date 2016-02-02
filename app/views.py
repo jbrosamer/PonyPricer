@@ -21,9 +21,7 @@ def input():
     return render_template("input.html", colors=cat.colors, breeds=cat.breeds)
 
 @app.route('/output')
-def output():
-	print request.args
-	
+def output():	
 	askingPrice=float(request.args['price'])
 
 	#need to format into dict with list for values. Have gender switch for first test, and age +/ 50% for next two elements
@@ -41,16 +39,12 @@ def output():
 		if k=='price':
 			continue
 		inputDict[k]=[request.args[k]]*nVars
-	print "inputDict",inputDict
 	for n, val in enumerate(ageRange):
 		inputDict['age'][n+ageStart]=val
 	for n, val in enumerate(genderRange):
 		inputDict['gender'][n+genderStart]=val
 	for n, val in enumerate(heightRange):
 		inputDict['inches'][n+heightStart]=val
-
-	# print "inputDict",inputDict
-
 	pred=np.power(10, m.predForWeb(inputDict))
 
 	ageData=list(pred[ageStart:ageStart+len(ageRange)])
