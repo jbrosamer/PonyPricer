@@ -7,21 +7,13 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../static/img/pony.svg">
+    <link rel="icon" href="../static/img/header.png">
 
     <title>Pony Pricer</title>
 
     <!-- Bootstrap core CSS -->
     <link href="../static/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="../static/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="jumbotron.css" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-
-     <script type="text/javascript" src="http://kozea.github.com/pygal.js/javascripts/pygal-tooltips.js"></script>
      
    
 
@@ -86,26 +78,17 @@
 
   <body>
 
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="./input">Price another pony!</a>
-        </div>
-<!--         <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="http://getbootstrap.com/examples/starter-template/#">Home</a></li>
-            <li><a href="mailto:jbrosamer@gmail.com"">Mail</a></li>
-            <li><a href="http://getbootstrap.com/examples/starter-template/#contact">Contact</a></li>
+
+      <div class="header clearfix">
+        <nav>
+          <ul class="nav nav-pills pull-right">
+            <li role="presentation"><a href="https://drive.google.com/file/d/0B-HB0ecLyJBbNGJPaWxnd1JRRFU/view?usp=sharing">Slides</a></li>
+            <li role="presentation"><a href="https://github.com/jbrosamer"><i class="fa fa-github fa-2x wow bounceIn"></i></a></li>
+            <li role="presentation"><a href="https://www.linkedin.com/in/jbrosamer"><i class="fa fa-linkedin fa-2x wow bounceIn"></i></a></li>
           </ul>
-        </div><!--/.nav-collapse --> 
+        </nav>
+        <h3 class="text-muted"><a href="./input">Price another pony</a></h3>
       </div>
-    </nav>
 
     <!-- Main jumbotron for a primary marketing message or call to action -->
     <div class="jumbotron">
@@ -210,7 +193,7 @@
                 borderWidth: 0,
                 marker: {
                           enabled: false,
-                        symbol: 'url(../static/img/horse123.png)',
+                        symbol: 'url(../static/img/horse.png)',
                     states: {
                         hover: {
                             enabled: true
@@ -250,7 +233,7 @@ $(function () {
             area: {
                 marker: {
                           enabled: false,
-                        symbol: 'url(../static/img/horse123.png)',
+                        symbol: 'url(../static/img/horse.png)',
                     states: {
                         hover: {
                             enabled: true
@@ -294,7 +277,7 @@ $(function () {
             area: {
                 marker: {
                     enabled: false,
-                    symbol: 'url(../static/img/horse123.png)',
+                    symbol: 'url(../static/img/horse.png)',
                     // radius: 0.05,
                     states: {
                         hover: {
