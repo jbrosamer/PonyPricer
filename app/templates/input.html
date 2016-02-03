@@ -33,7 +33,7 @@
 		h1 {
 			font-family: "Abel", Arial, sans-serif;
 			font-weight: 400;
-			font-size: 40px;
+			font-size: 50px;
 		}
 
 		/* Override B3 .panel adding a subtly transparent background */
@@ -57,8 +57,9 @@
 <body>
 	<div class="header clearfix">
           <ul class="nav nav-pills pull-right">
+          	<li role="presentation"><a href="https://www.linkedin.com/in/jbrosamer"><i class="fa fa-linkedin fa-2x"></i></a></li>
           	<li role="presentation"><a href="https://github.com/jbrosamer"><i class="fa fa-github fa-2x"></i></a></li>
-            <li role="presentation"><a href="https://www.linkedin.com/in/jbrosamer"><i class="fa fa-linkedin fa-2x wow bounceIn"></i></a></li>
+          	<li role="presentation"><a href="mailto:jbrosamer@gmail.com"><i class="fa fa-envelope-o fa-2x"></i></a></li>
             <li role="presentation"><a href="https://drive.google.com/file/d/0B-HB0ecLyJBbNGJPaWxnd1JRRFU/view?usp=sharing">Slides</a></li>
             
           </ul>
@@ -67,16 +68,16 @@
 
 	<div class="container">
 		<div class="row">
-			<div class="col-md-6 col-md-offset-3 panel panel-default">
+			<div class="col-lg-6 col-lg-offset-3 panel panel-default">
 
 				<h1 class="margin-base-vertical">Pony pricer!</h1>
 
-				<p>
+				<p style="font-size:x-large">
 					A data driven model for predicting horse sale prices.
 				</p>
 
 		<div class="form-group">
-		<form  action="/output" method="GET" class="margin-base-vertical">
+		<form  action="/output" method="GET" class="margin-base-vertical" style="font-size:x-large">
         <div>
           <label for="age">Age (years):</label>
           <input type="number" id="age" name='age' placeholder="e.g." value="10" min="0" max="20">
