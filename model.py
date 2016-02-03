@@ -206,11 +206,11 @@ class Model():
             gbr.fit(self.X_train[train], self.y_train[train])
             pred = gbr.predict(self.X_train[test])
             print "Score", gbr.score(self.X_train[test], self.y_train[test])
-            predExp=np.power(pred, 10)
-            testExp=np.power(self.y_train[test], 10)
+            predExp=np.power(10, pred)
+            testExp=np.power(10, self.y_train[test])
             medError=median_absolute_error(predExp, testExp)
             percentError=np.median([np.fabs(p-t)/t for p,t in zip(predExp, testExp)])
-            error = mean_squared_error(np.power(pred, 10), np.power(self.y_train[test], 10))**0.5
+            error = mean_squared_error(np.power(10, pred), np.power(10, self.y_train[test]))**0.5
             self.results['pred'] += list(pred)
             self.results['real'] += list(self.y_train[test])
             self.rmse_cv += [error]
@@ -298,7 +298,7 @@ class Model():
         Plots results from CV
         Slow right now but unsure why!
         """
-        pMax=priceMax*10
+        pMax=priceMax*5
         pMin=priceMin/5
         print "Starting"
         if log:
@@ -333,7 +333,7 @@ class Model():
         
         ax.legend(loc=2, fontsize=30)
         ax.tick_params(labelsize =20)
-        return fig, ax
+        plt.show()
 
     def plotFeatures(self, nFeat=8):
         importances = self.gbr.feature_importances_
@@ -342,7 +342,6 @@ class Model():
         indices = np.argsort(importances)[::-1]
         self.importances=importances
         self.indices=indices
-
         print("Feature ranking:")
         outfile=open("Features.txt", 'wb')
 
