@@ -3,7 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pony pricer</title>
+     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
@@ -14,7 +15,7 @@
     <!-- Bootstrap core CSS -->
     <link href="../static/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-     
+      <link href="http://fonts.googleapis.com/css?family=Abel|Open+Sans:400,600" rel="stylesheet" />
    
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -36,13 +37,14 @@
     }
 
     body {
-      padding-top: 20px;
+      padding-top: 5px;
       font-size: 16px;
       background: transparent;
 
     }
 
     h1 {
+      font-family: "Abel", Arial, sans-serif;
       font-weight: 400;
       font-size: 40px;
 
@@ -51,25 +53,17 @@
     .container,
     .panel,
 .marketing,
-.jumbotron,
 .footer,
 .navbar
 {
-  margin: 25px;
+  margin: 5px;
 }
 
 
 
-    /* Override B3 .panel adding a subtly transparent background */
-    .jumbotron {
-      background-color: rgba(255, 255, 255, 0.9);
-    }
-    .panel {
-      background-color: rgba(0, 0, 0, 0.85);
-    }
 
     .margin-base-vertical {
-      margin: 40px 0;
+      margin: 5px auto;
     }
 
   </style>
@@ -92,13 +86,10 @@
       </div>
 
     <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron">
-      <div class="container">
-        
-        
+    <div class="container">
+      <div class="col-lg-6 col-lg-offset-3 panel panel-default" style="background-color: rgba(255, 255, 255, 0.9);">
         <h1>Estimated price: ${{ estimate | int }}</h1>
         {% if estimate > askingPrice %}
-        
           <p style="font-size:x-large"><i class="fa fa-thumbs-o-up"></i>
                Probably a good deal!
             </p>
@@ -114,13 +105,40 @@
         </h3>
           
       {% endif %}
+<!-- 
+      <div class="col-md-6">
+<div class="panel panel-default">
+  <div class="row outer">
+    <div class="col-md-6">
       {% for o in outStrs %}
             <p style="font-size:medium">{{ o }}</p>
         {% endfor %}
       </div>
+    <div class="col-md-6"><span><p style="font-size:medium">hi</p><p style="font-size:medium">hi</p></span></div>
+  </div>
+</div>
+</div> -->
+  <div class="row outer">
+    <div class="col-sm-6">
+      <span>
+       {% for o in outStrs[:3] %}
+            <p style="font-size:medium">{{ o }}</p>
+        {% endfor %}
+      </span>
     </div>
+    <div class="col-sm-6"><span>
+      {% for o in outStrs[3:] %}
+            <p style="font-size:medium">{{ o }}</p>
+        {% endfor %}
+    </span></div>
+  </div>
+</div>
+      
+       </div> <!-- End of jumbotron div -->
+
       <!-- Example row of columns -->
-      <div class="panel">
+      <div class="container">
+      <div class="col-lg-6 col-lg-offset-3 panel panel-default" style="background-color: rgba(0, 0, 0, 0.85)">
         <ul class="nav nav-tabs">
             <li role="button" id="ageBtn"><a href="#">Age</a></li>
   <li role="button" id="genderBtn"><a href="#">Gender</a></li>
@@ -129,17 +147,16 @@
 </ul>
 
         <div id='ageDiv'>
-         <p id="agePlt" style="min-width: 95%; height: 500px; margin: 0"></p>
+         <p id="agePlt" style="margin: 5 auto"></p>
        </div>
                <div id='genderDiv'>
-           <div id="genderPlt" style="min-width: 95%; height: 500px; margin:0 "></div>
+           <div id="genderPlt" style="margin: 5 auto "></div>
         </div>
         <div id='htDiv'>
-           <p id="htPlt" style="min-width: 95%; height: 500px; margin:0"></p>
+           <p id="htPlt" style="margin: 5 auto"></p>
         </div>
-      </div>
-
-      <hr>
+      </div> <!-- End of nav tabs div -->
+    </div>
 
 
 
@@ -159,6 +176,16 @@
     <script type="text/javascript" src="../static/js/charttheme.js"></script>
     <script type="text/javascript">$(function () {
 
+
+
+
+
+
+$("#genderBtn").click(function() { 
+    // assumes element with id='button'
+     $("#genderDiv").show();
+     $("#ageDiv").hide();
+     $("#htDiv").hide();
 
     $('#genderPlt').highcharts({
         chart: {
@@ -210,7 +237,14 @@
         }]
     });
 });
-$(function () {
+
+});
+$("#ageBtn").click(function() { 
+    // assumes element with id='button'
+     $("#ageDiv").show();
+     $("#genderDiv").hide();
+     $("#htDiv").hide();
+     $(function () {
     $('#agePlt').highcharts({
         chart: {
             type: 'area'
@@ -258,7 +292,13 @@ $(function () {
     });
 });
 
-$(function () {
+});
+$("#htBtn").click(function() { 
+    // assumes element with id='button'
+     $("#genderDiv").hide();
+     $("#ageDiv").hide();
+     $("#htDiv").show();
+     $(function () {
     $('#htPlt').highcharts({
         chart: {
             type: 'area'
@@ -310,28 +350,16 @@ $(function () {
     });
 });
 
-$("#genderBtn").click(function() { 
-    // assumes element with id='button'
-     $("#genderDiv").show();
-     $("#ageDiv").hide();
-     $("#htDiv").hide();
 
 });
-$("#ageBtn").click(function() { 
-    // assumes element with id='button'
-     $("#ageDiv").show();
-     $("#genderDiv").hide();
-     $("#htDiv").hide();
+   $("#ageBtn").click();
 
-});
-$("#htBtn").click(function() { 
-    // assumes element with id='button'
-     $("#genderDiv").hide();
-     $("#ageDiv").hide();
-     $("#htDiv").show();
+   window.onresize=function(){resized();}
 
-});
-  $("#ageBtn").click();
+function resized()
+{
+   $("#container").highcharts().redraw();
+}
 
 
 

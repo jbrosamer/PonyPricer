@@ -29,7 +29,7 @@ from categories import skills
 skillsCol=['dressage', 'hunt', 'jump', 'event', 'prospect', 'import']
 baseCols=['age', 'gender', 'inches', 'color', 'breed']
 baseCols+=['logprice']
-allCols=['age', 'gender', 'inches', 'color', 'breed']+keywords+skills
+allCols=['age', 'gender', 'inches', 'color', 'breed']+skills
 allCols+=['logprice']
 txtCols=['desc', 'logprice']
 lblColumns=['breed', 'color', 'gender', 'breedGroup']
