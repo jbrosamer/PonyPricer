@@ -16,12 +16,6 @@ br.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.
 columns=['id','breed', 'breedStr', 'price', 'color','location', 'age', 'zip', 'height', 'temp', 'warmblood', 'sold', 'soldhere', 'gender']
 columns+=['forsale', 'forlease', 'registered', 'skills', 'desc']
 cellColMap={32: 'for lease', 34: 'for sale', 2: 'zip', 36: 'price', 38: 'skills', 6: 'age', 8: 'gender', 10: 'height', 14: 'color', 20: 'warmblood', 22: 'temp', 4: 'breed', 26: 'registered', 40: 'desc'}
-# mech = Browser()
-# page = br.open(url)
-# html = page.read()
-# soup = BeautifulSoup(html)
-# numInSearch=None
-#can just get ids then use to look at ads
 fromPickle=True
 scrapedIds=[]
 urlDict=OrderedDict([('Dressage',"http://www.dreamhorse.com/d/5/dressage/horses-for-sale.html"), ( "Jumping","http://www.dreamhorse.com/d/12/jumping/horses-for-sale.html"), ( "Eventing","http://www.dreamhorse.com/d/8/eventing/horses-for-sale.html"), ( "Hunter","http://www.dreamhorse.com/d/11/hunter/horses-for-sale.html"), ("Warmblood", "http://www.dreamhorse.com/list-horses/warmbloods.html"), ("AllAround", "http://www.dreamhorse.com/d/33/all-around/horses-for-sale.html")])
@@ -33,6 +27,9 @@ if fromPickle and os.path.isfile(scrapedIdFile):
 	scrapedIds=sorted(list(pickle.load(open(scrapedIdFile, 'rb'))))
 
 def dateStrToAge(cellTxt):
+	"""
+		Parse date Str
+	"""
 	try:
 		bd=datetime.strptime(cellTxt.split("\n")[0],"%b %Y")
 	except:
