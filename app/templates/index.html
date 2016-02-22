@@ -35,12 +35,6 @@
       background-size: cover;
       fontFamily: "'Unica One', sans-serif";
     }
-    .fullWidth {
-   width: 100%;
-   margin-left: auto;
-   margin-right: auto;
-   max-width: initial;
-}
 
     body {
       padding-top: 5px;
@@ -55,15 +49,7 @@
       font-size: 40px;
 
     }
-    .header,
-    .container,
-    .panel,
-.marketing,
-.footer,
-.navbar
-{
-  margin: 5px;
-}
+
 .panel
 {
   padding-left:50px; 
@@ -72,9 +58,9 @@
 
 
 
-    .margin-base-vertical {
+/*    .margin-base-vertical {
       margin: 5px auto;
-    }
+    }*/
 
   </style>
 
@@ -83,7 +69,7 @@
   <body>
 
 
-      <div class="header clearfix">
+      <div class="header clearfix" style="margin: 50px;">
         <nav>
           <ul class="nav nav-pills pull-right">
             <li role="presentation"><a href="https://www.linkedin.com/in/jbrosamer"><i class="fa fa-linkedin fa-2x"></i></a></li>
@@ -97,22 +83,17 @@
 
     <!-- Main jumbotron for a primary marketing message or call to action -->
     <div class="container">
-      <div class="panel panel-default row" style=" background-color: rgba(255, 255, 255, 0.9);">
+      <div class="panel panel-default" style=" background-color: rgba(255, 255, 255, 0.9);">
         <h1>Estimated price: ${{ estimate | int }}</h1>
-        {% if estimate > askingPrice %}
-          <p style="text-align:center; font-size:x-large;"><i class="fa fa-thumbs-o-up"></i>
-               Probably a good deal!
-            </p>
-            <h5>
-          ${{ (estimate-askingPrice)  | int }} predicted savings with a ${{ askingPrice | int }} asking price
-        </h5>
+        {% if estimate >= askingPrice %}
+        <p style="font-size:x-large"><span style="color: rgb(43, 145, 120);"<i class="fa fa-thumbs-o-up"></i>
+               Good deal</span> ${{ (estimate-askingPrice)  | int }} predicted savings with a ${{ askingPrice | int }} asking price
+        </p>
+
       {% else %}
-      <p style="font-size:x-large"><i class="fa fa-thumbs-o-down"></i>
-               Probably a bad deal!
-            </p>
-          <h3>
-          ${{ (askingPrice-estimate)  | int }} predicted loss with a ${{ askingPrice | int }} asking price
-        </h3>
+      <p style="font-size:x-large"><span style="color: rgb(145, 43, 43);"<i class="fa fa-thumbs-o-down"></i>
+               Bad deal</span> ${{ (askingPrice-estimate)  | int }} predicted loss with a ${{ askingPrice | int }} asking price
+        </p>
           
       {% endif %}
 <!-- 
@@ -157,13 +138,13 @@
 </ul>
 
         <div id='ageDiv'>
-         <p id="agePlt" style="margin: 5 auto"></p>
+         <p id="agePlt"></p>
        </div>
                <div id='genderDiv'>
-           <div id="genderPlt" style="margin: 5 auto "></div>
+           <div id="genderPlt"></div>
         </div>
         <div id='htDiv'>
-           <p id="htPlt" style="margin: 5 auto"></p>
+           <p id="htPlt"></p>
         </div>
       </div> <!-- End of nav tabs div -->
     </div>
