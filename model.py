@@ -41,8 +41,6 @@ priceMin=1000
 
 priceMax=100000
 pandasPath="/Users/jbrosamer/PonyPricer/ConcatAds.p"
-#pandasPath="/Users/jbrosamer/PonyPricer/Batch/GreatLakesConcatAds.p"
-#pandasPath="/Users/jbrosamer/PonyPricer/BatchBkup/DressageAllAds.p"
 if final_cols==allCols:
     modelPath="%s/ModelAllCols/"%os.path.dirname(os.path.abspath(__file__))
 else:
@@ -50,17 +48,23 @@ else:
 
 
 def pow10(npArray):
+    """
+        Slightly faster way to take 10^ for reversing log
+    """
     return np.array([10**x for x in npArray])
     
 def all_data(path=pandasPath):
     """
-    Takes in: with wildcarding of dataframes stored in .csv
+    Takes in: with wildcarding of dataframes stored in .p
     
-    Returns: a dataframe of all 
+    Returns: a dataframe of all ads
     """
     df=pickle.load(open(path, 'rb'))    
     return df
 def cleanGender(row):
+    """
+        Make sure dataframe has valid gender
+    """
     if "Mare" in row['gender'] or "Filly" in row['gender']:
         return 1
     return 0
@@ -69,7 +73,9 @@ def cleanGender(row):
 
 
 def clean_col(df):
-    print "df.columns",df.columns
+    """
+        Make sure all columns are valid, remove duplicates and unclean data
+    """
     df=df.drop_duplicates(subset=['id'])
     df=df[(df['age']>0) & (df['price']>=priceMin) &  (df['price']<=priceMax) & (df['inches']>50) & (df['gender'] != '') & (df['breed'] != "Unknown")]
     df = df.reset_index().drop('index', axis = 1)
@@ -107,7 +113,13 @@ def encode(df, dump=fromPickle):
     return df
 
 class TxtFeatures():
+    """
+    Small class to do tf-idf feature identification
+    """
     def __init__(self, df=None):
+        """
+        Load data and intialize object
+        """
         if df is None:
             df=all_data()
         self.df=clean_col(df)
@@ -115,6 +127,9 @@ class TxtFeatures():
         self.df = self.df.reset_index().drop('index', axis = 1)
         self.test_size = 0.1
     def split(self):
+        """
+        Split for testing
+        """
         np.random.seed(1)
         self.df = self.df.reindex(np.random.permutation(self.df.index))
         self.df = self.df.reset_index().drop('index', axis = 1)
@@ -131,6 +146,9 @@ class TxtFeatures():
         self.gbr=None
         
     def fit(self):
+        """
+        Fit tfidf vectorizer to df
+        """
         self.split()
         vectorizer=TfidfVectorizer(stop_words='english')
         vX_train = vectorizer.fit_transform(self.X_train)

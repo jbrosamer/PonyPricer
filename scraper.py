@@ -8,6 +8,7 @@ from progressbar import ProgressBar
 from collections import OrderedDict
 
 url="http://www.dreamhorse.com/d/5/dressage/horses-for-sale.html"
+#initialize browser
 br = Browser()
 br.set_handle_robots(False)
 br.set_handle_robots(False)
@@ -28,7 +29,7 @@ if fromPickle and os.path.isfile(scrapedIdFile):
 
 def dateStrToAge(cellTxt):
 	"""
-		Parse date Str
+		Parse date string from web page and convert to years old
 	"""
 	try:
 		bd=datetime.strptime(cellTxt.split("\n")[0],"%b %Y")
@@ -38,6 +39,9 @@ def dateStrToAge(cellTxt):
 	return age
 
 def heightStrToIn(cellTxt):
+	"""
+		Take height table cell with hh or in and convert to float inches
+	"""
 	heightStr=cellTxt.split("\n")[1]
 	if "hh" in heightStr:
 		hhHeight=heightStr.split(" ")[0].split(".")
@@ -47,6 +51,9 @@ def heightStrToIn(cellTxt):
 	return heightStr
 
 def IdsFromKey(key, excludeScraped=True):
+	"""
+		Take ad region and load all pages to scrape ids values. Each ad will be scraped by ad later.
+	"""
 	page = br.open(urlDict[key])
 	html = page.read()
 	ids=[]
@@ -69,6 +76,9 @@ def IdsFromKey(key, excludeScraped=True):
 
 
 def scrapeSearch(key, batchSize=1000, batchStart=0):
+	"""
+		Open a pickle file and scrape ads with all of the ids in that file
+	"""
 
 	ids=list(sorted(pickle.load(open(dataDir+"%sIds.p"%key, "rb"))))
 	print "Loaded %i ids from %s"%(len(ids), dataDir+"%sIds.p"%key)
@@ -107,6 +117,9 @@ def scrapeSearch(key, batchSize=1000, batchStart=0):
     
     
 def getNextPage(br):
+	"""
+		Go to next page with mechanize and return html
+	"""
 	for nr, form in enumerate(br.forms()):
 		if "http://www.dreamhorse.com/show_list_pages.php"==form.action:
 			for control in form.controls:
@@ -118,6 +131,9 @@ def getNextPage(br):
 	return ""
 
 def extractIds(html):
+	"""
+		Get ids of all ads listed on a page
+	"""
 	soup = BeautifulSoup(html, "html.parser")
 	ids=list()
 	for input_el in soup.findAll('input'):
@@ -127,6 +143,9 @@ def extractIds(html):
 
 
 def scrapeAd(id):
+	"""
+		Take an id and scrape for all the features in adDict. Return a dataframe.
+	"""
 	page = br.open("http://www.dreamhorse.com/ad/%i.html"%id)
 	html = page.read()
 	soup = BeautifulSoup(html, "html.parser")
