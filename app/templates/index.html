@@ -35,6 +35,12 @@
       background-size: cover;
       fontFamily: "'Unica One', sans-serif";
     }
+    .fullWidth {
+   width: 100%;
+   margin-left: auto;
+   margin-right: auto;
+   max-width: initial;
+}
 
     body {
       padding-top: 5px;
@@ -58,7 +64,11 @@
 {
   margin: 5px;
 }
-
+.panel
+{
+  padding-left:50px; 
+  padding-right:50px; 
+}
 
 
 
@@ -87,10 +97,10 @@
 
     <!-- Main jumbotron for a primary marketing message or call to action -->
     <div class="container">
-      <div class="col-lg-6 col-lg-offset-3 panel panel-default" style="background-color: rgba(255, 255, 255, 0.9);">
+      <div class="panel panel-default row" style=" background-color: rgba(255, 255, 255, 0.9);">
         <h1>Estimated price: ${{ estimate | int }}</h1>
         {% if estimate > askingPrice %}
-          <p style="font-size:x-large"><i class="fa fa-thumbs-o-up"></i>
+          <p style="text-align:center; font-size:x-large;"><i class="fa fa-thumbs-o-up"></i>
                Probably a good deal!
             </p>
             <h5>
@@ -138,7 +148,7 @@
 
       <!-- Example row of columns -->
       <div class="container">
-      <div class="col-lg-6 col-lg-offset-3 panel panel-default" style="background-color: rgba(0, 0, 0, 0.85)">
+      <div class="panel panel-default" style="background-color: rgba(0, 0, 0, 0.85)">
         <ul class="nav nav-tabs">
             <li role="button" id="ageBtn"><a href="#">Age</a></li>
   <li role="button" id="genderBtn"><a href="#">Gender</a></li>
